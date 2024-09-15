@@ -1,7 +1,8 @@
 const express = require("express");
-const { getBundles } = require("../controller/bundle.controller");
+const { getBundles, getBundleById } = require("../controller/bundle.controller");
 const bundleRoute = express.Router();
 
 bundleRoute.get("/bundles", getBundles);
+bundleRoute.get("/bundle", getBundleById);
 
 module.exports = bundleRoute;
