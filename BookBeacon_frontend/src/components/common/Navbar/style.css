@@ -1,0 +1,13 @@
+.navbar {
+    padding: 20px 30px;
+    background-color: #f2f2f2;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-family: sans-serif;
+}
+
+.table-data {
+    padding: 5px;
+}
