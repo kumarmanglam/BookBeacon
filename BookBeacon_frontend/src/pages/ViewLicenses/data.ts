@@ -17,3 +17,9 @@ export const licenses = [
         mode: "premium",
     },
 ];
+const filteredData = licenses.map(({ license_name, mode }) => ({
+    license_name,
+    mode
+  }));
+
+export default filteredData;
