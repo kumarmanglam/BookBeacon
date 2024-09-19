@@ -1,5 +1,6 @@
 
 import { json } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import "./style.css";
 interface prop {
     headerConfig: any,
@@ -26,6 +27,16 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
                             {
                                 headerConfig.map((val: any, i: any) => {
                                     const cellData = item[val["key"]];
+
+                                    if (val.key === 'license_name') {
+                                        return (
+                                          <td key={i} className={`${val.classes} table-data`}>
+                                            <Link to={`/licenses/${item.id}`} className="text-blue-500 hover:underline">
+                                              {cellData}
+                                            </Link>
+                                          </td>
+                                        );
+                                    }
                                     return (
                                         <td key={i} className={`${item.classes} table-data`}>
                                             {cellData !== -1 ? cellData : 'N/A'}
