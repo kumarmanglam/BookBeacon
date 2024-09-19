@@ -1,4 +1,5 @@
-import { json } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//import { json } from "react-router-dom";
 
 interface prop {
     headerConfig: any,
