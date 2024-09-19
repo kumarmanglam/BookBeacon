@@ -1,6 +1,6 @@
+
 import { json } from "react-router-dom";
 import "./style.css";
-
 interface prop {
     headerConfig: any,
     data: any
