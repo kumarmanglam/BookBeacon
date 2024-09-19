@@ -5,7 +5,7 @@ import "./style.css"
 const Navbar = () => {
     return (
         <div className='navbar'>
-            <div><p>BookBeacon</p></div>
+            <div><p className='nav-logo'>BookBeacon</p></div>
         </div>
     )
 }

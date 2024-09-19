@@ -1,11 +1,13 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom';
-import ViewLicenses from "../pages/ViewLicenses"
+import ViewBooksInsideLicense from "../pages/ViewBooksInsideLicense"
+import ViewLicenses from "../pages/ViewLicenses";
 
 const RouterContainer = () => {
     return (
         <Routes>
             <Route path='/licenses' element={<ViewLicenses />} />
+            <Route path='/booksInLicense' element={<ViewBooksInsideLicense />} />
         </Routes>
     )
 }
