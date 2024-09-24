@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
+import Navbar from "../../components/common/Navbar";
 
 const bundleNames = [
   "ariddles24", "ngilderoyy", "kbrandi0", "bgariff3", "ramorta", "kbrandi0", "lironl",
@@ -74,6 +75,10 @@ const CreateLicense = () => {
       setErrorMessage("");
     }
   };
+  const handleClearBundle = () => {
+    setSelectedBundle("");
+    setQuery("");
+  };
 
   // const handleLicenseType = (
   //   _event: React.MouseEvent<HTMLElement>,
@@ -85,29 +90,30 @@ const CreateLicense = () => {
   // };
 
   return (
-    <div className="container">
-      <h1>License Details</h1>
+    <>
+      <Navbar />
+      <h1 className="container-title">LICENSE DETAILS</h1>
+      <div className="container">
+        {/* <!-- License Type --> */}
+        <div className="license-type">
+          <button
+            className={`license-btn ${selectedLicense === "Premium" ? "active" : ""
+              }`}
+            onClick={() => handleLicenseSelection("Premium")}
+          >
+            Premium
+          </button>
+          <button
+            className={`license-btn ${selectedLicense === "Normal" ? "active" : ""
+              }`}
+            onClick={() => handleLicenseSelection("Normal")}
+          >
+            Normal
+          </button>
+        </div>
 
-      {/* <!-- License Type --> */}
-      <div className="license-type">
-        <button
-          className={`license-btn ${selectedLicense === "Premium" ? "active" : ""
-            }`}
-          onClick={() => handleLicenseSelection("Premium")}
-        >
-          Premium
-        </button>
-        <button
-          className={`license-btn ${selectedLicense === "Non Premium" ? "active" : ""
-            }`}
-          onClick={() => handleLicenseSelection("Non Premium")}
-        >
-          Non Premium
-        </button>
-      </div>
-
-      {/* <!-- Toggles --> */}
-      {/* <div className="toggles">
+        {/* <!-- Toggles --> */}
+        {/* <div className="toggles">
         <div className="toggle">
           <label htmlFor="view-online">View Online</label>
           <input type="checkbox" id="view-online" checked />
@@ -118,124 +124,133 @@ const CreateLicense = () => {
         </div>
       </div> */}
 
-      <hr />
+        {/* <hr /> */}
 
-      {/* <!-- Form Fields --> */}
-      <div className="form-section">
-        {/* <label htmlFor="application">
-          Application <span className="required">*</span>
-        </label>
-        <select id="application" required>
-          <option value="">Select Application</option>
-          <option value="app1">App 1</option>
-          <option value="app2">App 2</option>
-        </select> */}
+        {/* <!-- Form Fields --> */}
+        <div className="form-section">
+          <label htmlFor="license-name">
+            License Name<span className="required"> * </span>
+          </label>
+          <input
+            type="text"
+            id="license-name"
+            required
+            placeholder="Enter License Name"
+          />
 
-        <label htmlFor="start-date">
-          Select Start Date <span className="required">*</span>
-        </label>
-        <input
-          type="date"
-          id="start-date"
-          required
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
 
-        <label htmlFor="end-date">
-          Select End Date <span className="required">*</span>
-        </label>
-        <input
-          type="date"
-          id="end-date"
-          required
-          value={endDate}
-          onChange={handleEndDateChange}
-        />
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        <label htmlFor="order-number">
-          Order Number <span className="required">*</span>
-        </label>
-        <input
-          type="text"
-          id="order-number"
-          placeholder="Enter Order Number"
-          required
-        />
+          <label htmlFor="start-date">
+            Select Start Date <span className="required">*</span>
+          </label>
+          <input
+            type="date"
+            id="start-date"
+            required
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
 
-        <label htmlFor="purchase-date">
-          Select Purchase Date <span className="required">*</span>
-        </label>
-        <input
-          type="date"
-          id="purchase-date"
-          value={today}
-          disabled
-          required
-        />
+
+          <label htmlFor="end-date">
+            Select End Date <span className="required">*</span>
+          </label>
+          <input
+            type="date"
+            id="end-date"
+            required
+            value={endDate}
+            onChange={handleEndDateChange}
+          />
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+          <label htmlFor="order-number">
+            Order Number <span className="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="order-number"
+            placeholder="Enter Order Number"
+            required
+          />
+
+          <label htmlFor="purchase-date">
+            Select Purchase Date <span className="required">*</span>
+          </label>
+          <input
+            type="date"
+            id="purchase-date"
+            value={today}
+            disabled
+            required
+          />
+        </div>
+
       </div>
+      <h1 className="container-title">PRODUCT BUNDLE</h1>
+      <div className="container">
 
-      {/* <!-- Product Bundle --> */}
-      <div className="form-section">
-        <label htmlFor="bundle-name">Bundle Name</label>
-        <input
-          type="text"
-          id="bundle-name"
-          value={query}
-          onChange={handleInputChange}
-          placeholder="Search by Bundle Name"
-        />
-        {filteredBundles.length > 0 && (
-          <ul className="bundle-list">
-            {filteredBundles.map((bundle, index) => (
-              <li
-                key={index}
-                onClick={() => handleBundleClick(bundle)}
-                className="bundle-item"
-              >
-                {bundle}
-              </li>
-            ))}
-          </ul>
-        )}
-        {selectedBundle && (
-          <div className="selected-bundle">
-            <strong>Selected Bundle: </strong> {selectedBundle}
+        {/* <!-- Product Bundle --> */}
+        <div className="form-section">
+          <label htmlFor="bundle-name">Product Bundle <span className="required">*</span> </label>
+          <div className="input-container">
+            <input
+              type="text"
+              id="bundle-name"
+              value={query}
+              onChange={handleInputChange}
+              placeholder="Search by Bundle Name"
+              disabled={!!selectedBundle}
+            />
+            {!selectedBundle && <i className="fa fa-search"></i>}
+            {selectedBundle && <i className="clear-icon" onClick={handleClearBundle}>✖</i>}
           </div>
-        )}
-        <div className="product-status">
-          <span className="available">Available: 2</span>
-          <span className="forthcoming">Forthcoming: 0</span>
-          <span className="invalid">Invalid: 0</span>
+          {filteredBundles.length > 0 && (
+            <ul className="bundle-list">
+              {filteredBundles.map((bundle, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleBundleClick(bundle)}
+                  className="bundle-item"
+                >
+                  {bundle}
+                </li>
+              ))}
+            </ul>
+          )}
+          {selectedBundle && (
+            <div className="selected-bundle">
+              <strong>Selected Bundle: </strong> {selectedBundle}
+            </div>
+          )}
+          <div className="product-status">
+            <span className="available">Available: 2</span>
+            <span className="forthcoming">Forthcoming: 0</span>
+            <span className="invalid">Invalid: 0</span>
+          </div>
         </div>
+
+        {/* <!-- DRM Policies --> */}
       </div>
-
-      {/* <!-- Bulk Upload --> */}
-      {/* <div className="form-section bulk-upload">
-        <label>Bulk Upload</label>
-        <div className="upload-box">
-          <button>Click to Upload</button>
-          <span>No file uploaded!</span>
+      <h1 className="container-title">DRM POLICES</h1>
+      <div className="container">
+        <div className="form-section drm-policies">
+          <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
+          <div className="policy">
+            <span>Concurrency: 1</span>
+            <span>Print/Copy: 20</span>
+          </div>
+          <a href="#">View/Edit concurrency per title</a>
         </div>
-      </div> */}
 
-      {/* <!-- DRM Policies --> */}
-      <div className="form-section drm-policies">
-        <h2>DRM Policies</h2>
-        <div className="policy">
-          <span>Concurrency: 1</span>
-          <span>Print/Copy: 20</span>
-        </div>
-        <a href="#">View/Edit concurrency per title</a>
-      </div>
+        {/* <!-- Save/Cancel Buttons --> */}
 
-      {/* <!-- Save/Cancel Buttons --> */}
+      </div >
       <div className="form-section buttons">
         <button className="save-btn">Save</button>
         <button className="cancel-btn">Cancel</button>
       </div>
-    </div >
+    </>
   );
 };
 
