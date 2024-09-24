@@ -6,6 +6,11 @@ import { act } from "react";
 const initialState = {
     licenses: [],
     currentLicense: {},
+    isLicenseExisting: false,
+    concurrency: 1,
+    booksBundle: [],
+    bundleName: "",
+    bundleId: "",
 };
 
 const LicenseReducer = createSlice({

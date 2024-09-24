@@ -6,6 +6,7 @@ import ViewLicenses from "../pages/ViewLicenses";
 const RouterContainer = () => {
     return (
         <Routes>
+            <Route path='/' element={<ViewLicenses />} />
             <Route path='/licenses' element={<ViewLicenses />} />
             <Route path='/booksInLicense' element={<ViewBooksInsideLicense />} />
         </Routes>
