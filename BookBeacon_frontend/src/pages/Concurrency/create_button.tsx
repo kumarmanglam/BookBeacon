@@ -32,8 +32,8 @@ const ButtonGroup: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-end mb-4 mt-10 mr-16">
-      <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600">
+    <div className="flex justify-end gap-5">
+      <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
         Save
       </button>
       <button onClick={handleDownloadCSV} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">

@@ -23,6 +23,9 @@ const LicenseReducer = createSlice({
         },
         setAllLicense: (state, action) => {
             state.licenses = action.payload;
+        },
+        setConcurrency: (state, action) => {
+            state.concurrency = action.payload;
         }
     }
 })
