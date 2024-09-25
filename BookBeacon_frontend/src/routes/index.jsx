@@ -5,6 +5,11 @@ import ViewLicenses from "../pages/ViewLicenses";
 import Login from "../pages/Login"
 import Signup from "../pages/Signup"
 
+import ConcurrencyPage from "../pages/Concurrency/index";
+
+import CreateLicense from '../pages/CreateLicense';
+
+
 const RouterContainer = () => {
     return (
         
@@ -13,6 +18,8 @@ const RouterContainer = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/' element={<ViewLicenses />} />
             <Route path='/booksInLicense' element={<ViewBooksInsideLicense />} />
+            <Route path='/license' element={<ConcurrencyPage />} />
+            <Route path='/createLicense' element={<CreateLicense />} />
         </Routes>
     )
 }

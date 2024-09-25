@@ -7,7 +7,17 @@ export const TABLE_HEADER_CONFIG_VIEW_BOOKS_INSIDE_LICENSE = [
 export const TABLE_HEADER_CONFIG_VIEW_lICENSE = [
     { key: "license_name", label: "License Name", classes: "" },
     { key: "mode", label: "Business Model", classes: "", },
+<<<<<<< HEAD
     { key: "start_date", label:"Start Date",classes:""},
     { key: "end_date", label:"End Date",classes:""},
     { key: "edit", label:"Edit",classes:""}
+=======
+    { key: "edit", label: "Edit", classes: "" }
+>>>>>>> upstream/dev
 ];
+
+export const TABLE_HEADER_CONFIG_CONCURRENCY = [
+    { key: "book_name", label: "Book Title", classes: "" },
+    { key: "concurrency", label: "Concurrency", classes: "concurrency-input", },
+
+]

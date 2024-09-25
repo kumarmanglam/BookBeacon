@@ -4,7 +4,7 @@ const protect = require("../middleware/authMiddleware")
 const bundleBooksRoute = express.Router();
 
 bundleBooksRoute.get("/bundlebooks", protect, getBundleBooks);
-bundleBooksRoute.get("/booksByBundleId/:bundle_id", protect, getBooksByBundleId);
+bundleBooksRoute.get("/booksByBundleId/:bundle_id", getBooksByBundleId);
 bundleBooksRoute.get("/bundleSearch", searchBundles)
 
 module.exports = bundleBooksRoute;
