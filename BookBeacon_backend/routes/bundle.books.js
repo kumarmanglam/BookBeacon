@@ -1,9 +1,10 @@
 const express = require("express");
-const { getBundleBooks, getBundleBooksById } = require("../controller/bundle.books.controller");
-
+const { getBundleBooks, getBooksByBundleId, insertBundleData, searchBundles } = require("../controller/bundle.books.controller");
+const protect = require("../middleware/authMiddleware")
 const bundleBooksRoute = express.Router();
 
-bundleBooksRoute.get("/bundlebooks", getBundleBooks);
-bundleBooksRoute.get("/bundlebooksById", getBundleBooksById);
+bundleBooksRoute.get("/bundlebooks", protect, getBundleBooks);
+bundleBooksRoute.get("/booksByBundleId/:bundle_id", protect, getBooksByBundleId);
+bundleBooksRoute.get("/bundleSearch", searchBundles)
 
 module.exports = bundleBooksRoute;
