@@ -1,8 +1,8 @@
 
-import { json } from "react-router-dom";
-import { Link } from "react-router-dom"; 
+// import { json } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import "./style.css";
 interface prop {
     headerConfig: any,
@@ -10,6 +10,7 @@ interface prop {
 }
 
 const Table: React.FC<prop> = ({ headerConfig, data }) => {
+    const navigate=useNavigate();
     return (
         <table className="table">
             <thead>
@@ -23,39 +24,63 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
 
             </thead>
             <tbody>
-                {
-                    data.map((item: any, index: number) => (
-                        <tr key={index} className="table-row">
-                            {
-                                headerConfig.map((val: any, i: any) => {
-                                    const cellData = item[val["key"]];
-                                    if (val.key === 'license_name') {
-                                        return (
-                                          <td key={i} className={`${val.classes} table-data`}>
-                                            <Link to={`/licenses/${item.id}`} className="text-blue-500 hover:underline">
-                                              {cellData}
-                                            </Link>
-                                          </td>
-                                        );
-                                    }
-                                    if (val.key === 'edit') {
-                                        return (
-                                          <td key={i} className={`${val.classes} table-data`}>
-                                            <button ><FontAwesomeIcon icon={faEllipsis}/></button>
-                                          </td>
-                                        );
-                                    }
-                                    return (
-                                        <td key={i} className={`${item.classes} table-data`}>
-                                            {cellData !== -1 ? cellData : 'N/A'}
-                                        </td>
-                                    );
-                                })
-                            }
-                        </tr>
-                    ))
-                }
-            </tbody>
+    {data.length > 0 ? (
+        data.map((item, index) => (
+            <tr key={index} className="table-row">
+                {headerConfig.map((val, i) => {
+                    const cellData = item[val.key];
+
+                    if (val.key === 'license_name') {
+                        return (
+                            <td key={i} className={`${val.classes} table-data`}>
+                                    {cellData}
+                            </td>
+                        );
+                    }
+                    if (val.key === 'start') {
+                        return (
+                            <td key={i} className={`${val.classes} table-data`}>
+                             {cellData}
+                            </td>
+                        );
+                    }
+                    if (val.key === 'end') {
+                        return (
+                            <td key={i} className={`${val.classes} table-data`}>
+                             {cellData}
+                            </td>
+                        );
+                    }
+                    
+
+                    if (val.key === 'edit') {
+                        return (
+                            <td key={i} className={`${val.classes} table-data`}>
+                                
+                                    <button onClick={() => navigate("/create-new")}  >
+                                        {/* <FontAwesomeIcon icon={faEllipsis} /> */}
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </button>
+                                
+                            </td>
+                        );
+                    }
+
+                    return (
+                        <td key={i} className={`${val.classes} table-data`}>
+                            {cellData !== undefined && cellData !== null ? cellData : 'N/A'}
+                        </td>
+                    );
+                })}
+            </tr>
+        ))
+    ) : (
+        <tr>
+            <td colSpan={headerConfig.length} className="text-center">No data available.</td>
+        </tr>
+    )}
+</tbody>
+
         </table>
     )
 }
