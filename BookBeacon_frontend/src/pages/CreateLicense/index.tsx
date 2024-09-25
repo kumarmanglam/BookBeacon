@@ -1,21 +1,11 @@
 import React, { useState } from "react";
 import "./index.css";
 import Navbar from "../../components/common/Navbar";
-import filteredData from "../ViewLicenses/data";
 import { useSelector } from "react-redux";
 import { selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { searchBundles } from "../../services/bundle";
 
-const bundleNames = [
-  "ariddles24", "ngilderoyy", "kbrandi0", "bgariff3", "ramorta", "kbrandi0", "lironl",
-  "cmeir1", "ariddles24", "bgariff3", "msuthren6", "ramorta", "kbrandi0", "smccooked",
-  "bgariff3", "bgariff3", "rvickerstaffb", "smccooked", "kbrandi0", "jtonner2", "lironl",
-  "bgariff3", "rvickerstaffb", "ramorta", "cmeir1", "mgregoraceo", "lironl", "lironl",
-  "rvickerstaffb", "iiskow14", "ngilderoyy", "rblint5", "hflasby1v", "smccooked",
-  "rvickerstaffb", "rvickerstaffb", "mgregoraceo", "rblint5", "hflasby1v", "ngilderoyy",
-  "kbrandi0"
-];
 
 const debounce = (func, delay) => {
   let timeoutId = delay;
@@ -31,37 +21,31 @@ const debounce = (func, delay) => {
 
 const CreateLicense = () => {
 
+  const today = new Date().toISOString().split("T")[0];
+
   const [mode, setMode] = useState("Premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [purchaseDate, setPurchaseDate] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState(today);
   const [selectedBundle, setSelectedBundle] = useState("");
   const [selectedBundleId, setSelectedBundleID] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
-
   const [query, setQuery] = useState("");
   const [filteredBundles, setFilteredBundles] = useState([]);
-
-  const [formData, setFormData] = useState<any>({});
-
   const LicenseReduxState = useSelector(selectLicenseState);
 
   // Function to handle search and filtering
   const handleSearch = debounce(async (input: any) => {
-    // if (input.length < 3) {
-    //   setFilteredBundles([]); // If input is less than 3 characters, don't show suggestions
-    //   return;
-    // }
-    // const lowerCaseInput = input.toLowerCase();
+    if (input.length < 3) {
+      setFilteredBundles([]); // If input is less than 3 characters, don't show suggestions
+      return;
+    }
     const results = await searchBundles(input);
     console.log(results);
     const bundles = results.data;
 
     setFilteredBundles(bundles);
-
-
 
   }, 300); // Delay of 300ms for debouncing
 
@@ -72,14 +56,13 @@ const CreateLicense = () => {
 
   const handleBundleClick = (bundle: any) => {
     console.log(bundle);
-    // setSelectedBundle(bundle);
+    setSelectedBundle(bundle.bundle_Name);
     setSelectedBundleID(bundle.bundle_id);
     console.log(selectedBundleId);
-    // setQuery(bundle); // Set the input value to the selected bundle
+    setQuery(bundle.bundle_Name); // Set the input value to the selected bundle
     setFilteredBundles([]); // Clear the suggestions once a bundle is selected
   };
 
-  const today = new Date().toISOString().split("T")[0];
 
   const handleLicenseSelection = (licenseType: string) => {
     setMode(licenseType);
@@ -128,7 +111,7 @@ const CreateLicense = () => {
       data.booksInBundle = LicenseReduxState.booksInBundle;
 
       const response = await createLicense(data, "variable");
-      
+
       console.log(response)
       //callCreateLicenseAPI(data, variable);
 
@@ -192,6 +175,7 @@ const CreateLicense = () => {
               id="start-date"
               required
               value={startDate}
+              max={today}
               onChange={(e) => setStartDate(e.target.value)}
             />
 
@@ -215,6 +199,8 @@ const CreateLicense = () => {
               type="date"
               id="purchase-date"
               value={purchaseDate}
+              max={today}
+              // placeholder={today}
               onChange={(e) => setPurchaseDate(e.target.value)}
 
               required
@@ -233,6 +219,7 @@ const CreateLicense = () => {
                 type="text"
                 id="bundle-name"
                 value={query}
+                required
                 onChange={handleInputChange}
                 placeholder="Search by Bundle Name"
                 disabled={!!selectedBundle}
@@ -258,11 +245,11 @@ const CreateLicense = () => {
                 <strong>Selected Bundle: </strong> {selectedBundle}
               </div>
             )}
-            <div className="product-status">
+            {/* <div className="product-status">
               <span className="available">Available: 2</span>
               <span className="forthcoming">Forthcoming: 0</span>
               <span className="invalid">Invalid: 0</span>
-            </div>
+            </div> */}
           </div>
 
           {/* <!-- DRM Policies --> */}
@@ -273,7 +260,7 @@ const CreateLicense = () => {
             <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
             <div className="policy">
               <span>Concurrency: 1</span>
-              <span>Print/Copy: 20</span>
+              <span>Print/Copy: --</span>
             </div>
             <a href="/editConcurracy">View/Edit concurrency per title</a>
           </div>
