@@ -12,6 +12,6 @@ export const TABLE_HEADER_CONFIG_VIEW_lICENSE = [
 
 export const TABLE_HEADER_CONFIG_CONCURRENCY = [
     { key: "book_name", label: "Book Title", classes: "" },
-    { key: "concurrency", label: "Concurrency", classes: "", },
+    { key: "concurrency", label: "Concurrency", classes: "concurrency-input", },
 
 ]

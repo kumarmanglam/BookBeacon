@@ -11,36 +11,41 @@ import { TABLE_HEADER_CONFIG_CONCURRENCY } from '../../config/tableConfig';
 import ButtonGroup from './create_button';
 import { booksData } from './data';
 import { fetchBooksById } from '../../services/bundleRough';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLicenseState } from '../../store/selectors/License.selector';
+import { setLicenceBooksInBundle } from '../../store/reducers/License.reducer';
 
 const ConcurrencyPage = () => {
   const dispatch = useDispatch();
-  const [data, setData] = useState<any>([]);
+  // const [data, setData] = useState<any>([]);
+  const resp = useSelector(selectLicenseState);
+  const licenceBooksInBundle = resp.licenceBooksInBundle;
+
   const [bulkEditValue, setBulkEditValue] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [isBulkSave, setIsBulkSave] = useState<boolean>(false);
   const [updatedBooksList, setUpdatedBooksList] = useState<any>([]);
 
-  const handleConcurrencyChange = (index: number, value: string) => {
-    const bundles = [...data];
-    bundles[index].concurrency = Number(value);
+  // const handleConcurrencyChange = (index: number, value: string) => {
+  //   const bundles = [...data];
+  //   bundles[index].concurrency = Number(value);
 
-    const newBundle = [];
-    let updatedBook = {};
-    setUpdatedBooksList((prev: any) => [...prev, updatedBook]);
-    setData(bundles);
-  };
+  //   const newBundle = [];
+  //   let updatedBook = {};
+  //   setUpdatedBooksList((prev: any) => [...prev, updatedBook]);
+  //   dispatch(setLicenceBooksInBundle(updatedData));
+  // };
 
   const handleBulkEdit = () => {
     setShowPopup(true);
   };
 
   const handleBulkSave = () => {
-    const updatedData = data.map((book: any) => ({
+    const updatedData = licenceBooksInBundle.map((book: any) => ({
       ...book,
       concurrency: Number(bulkEditValue),
     }));
-    setData(updatedData);
+    dispatch(setLicenceBooksInBundle(updatedData));
     // in redux we will update the concurrency
     // dispatch(setConcurrency(Number(bulkEditValue)));
     setShowPopup(false);
@@ -57,7 +62,8 @@ const ConcurrencyPage = () => {
       item.concurrency = 1;
       return item;
     })
-    setData(bunldeBooks)
+    console.log(bunldeBooks);
+    dispatch(setLicenceBooksInBundle(bunldeBooks));
   }
 
   useEffect(() => {
@@ -77,7 +83,7 @@ const ConcurrencyPage = () => {
         <div className="table-container">
           <Table
             headerConfig={TABLE_HEADER_CONFIG_CONCURRENCY}
-            data={data}
+            data={licenceBooksInBundle}
           />
         </div>
       </div>
