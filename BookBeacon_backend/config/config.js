@@ -1,6 +1,7 @@
 const { MongoClient } = require("mongodb");
-const dbURl = "mongodb+srv://gayatrikotla333:40L7ipLL8vBUsFWN@cluster0.dsfvy.mongodb.net/"
+const dbURL = "mongodb+srv://praneeth:praneeth@basicnodeconnect.x8dsf.mongodb.net/book_beacon?retryWrites=true&w=majority&appName=BasicNodeConnect"
 
+const mongoose = require("mongoose");
 async function dbConnection() {
     const client = new MongoClient(dbURl);
     await client.connect();
@@ -8,11 +9,10 @@ async function dbConnection() {
     return client.db("bookBeacon");
 }
 
-const mongoose = require("mongoose");
-async function connectDb() {
-    await mongoose.connect(dbURl + "bookBeacon")
+function connectDb() {
+    mongoose.connect(dbURL)
         .then(() => console.log("connected"))
         .catch(() => console.log("could not connect"));
 }
 
-module.exports = { dbConnection, connectDb };
+module.exports = { connectDb };

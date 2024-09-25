@@ -1,6 +1,4 @@
 
-
-
 const data = require("./data/data.json");
 const bundles = require("./data/bundles.json");
 const dbConnection = require("../config/config");
