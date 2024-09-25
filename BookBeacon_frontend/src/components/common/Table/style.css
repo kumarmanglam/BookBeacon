@@ -65,6 +65,11 @@
     border-bottom-right-radius: 20px;
 }
 
+.concurrency-input {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
 @media (max-width: 768px) {
     .table {
         font-size: 14px;
