@@ -27,7 +27,7 @@ const getBooksByBundleId = async (req, res) => {
 }
 const insertBundleData = async () => {
     try {
-        const data = fs.readFileSync("C:/Users/gayatri.kotla.TL233/Documents/VScode/MERN/BookBeacon/BookBeacon_backend/backend_initialization/data/data.json", 'utf8');
+        // const data = fs.readFileSync("C:/Users/gayatri.kotla.TL233/Documents/VScode/MERN/BookBeacon/BookBeacon_backend/backend_initialization/data/data.json", 'utf8');
 
         const bundles = JSON.parse(data);
 
@@ -56,5 +56,4 @@ const searchBundles = async (req, res) => {
 
 }
 
-insertBundleData();
 module.exports = { getBundleBooks, getBooksByBundleId, searchBundles };

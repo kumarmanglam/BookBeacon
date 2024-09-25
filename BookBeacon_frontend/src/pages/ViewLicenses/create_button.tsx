@@ -25,7 +25,7 @@ const ButtonGroup: React.FC = () => {
 
   return (
     <div className="flex justify-end mb-4 mt-10 mr-16">
-      <button onClick={() => navigate("/create-new")} className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600">
+      <button onClick={() => navigate("/createLicense")} className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600">
         Create New
       </button>
       <button onClick={handleDownloadCSV} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">

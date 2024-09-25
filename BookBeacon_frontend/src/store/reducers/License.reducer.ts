@@ -6,9 +6,10 @@ import { act } from "react";
 const initialState = {
     licenses: [],
     currentLicense: {},
+    isVariableConcurrency: false,
     isLicenseExisting: false,
     concurrency: 1,
-    booksBundle: [],
+    booksInBundle: [],
     bundleName: "",
     bundleId: "",
 };
@@ -28,3 +29,7 @@ const LicenseReducer = createSlice({
         }
     }
 })
+
+export const { setLicense, setAllLicense } = LicenseReducer.actions;
+
+export default LicenseReducer.reducer;
