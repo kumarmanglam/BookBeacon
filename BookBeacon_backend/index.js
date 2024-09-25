@@ -7,7 +7,7 @@ const bundleBooksRoute = require("./routes/bundle.books");
 const licenseRoute = require("./routes/license");
 const userRoute = require("./routes/user.route");
 const { connectDb } = require("./config/config");
-
+const cors = require("cors");
 const app = express();
 
 mongoose.connect(dbURL)
@@ -15,6 +15,7 @@ mongoose.connect(dbURL)
     .catch(() => console.log("could not connect"));
 
 app.use(json());
+app.use(cors());
 
 app.use("/", bundleBooksRoute);
 app.use("/", licenseRoute);
