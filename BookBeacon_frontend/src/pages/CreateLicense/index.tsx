@@ -240,7 +240,7 @@ const CreateLicense = () => {
             <span>Concurrency: 1</span>
             <span>Print/Copy: 20</span>
           </div>
-          <a href="#">View/Edit concurrency per title</a>
+          <a href="/editConcurracy">View/Edit concurrency per title</a>
         </div>
 
         {/* <!-- Save/Cancel Buttons --> */}
