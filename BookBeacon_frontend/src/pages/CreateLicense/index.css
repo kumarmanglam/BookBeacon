@@ -1,0 +1,208 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.container-title {
+    margin: 20px auto;
+    margin-left: 40px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.license-type {
+    margin-bottom: 20px;
+}
+
+.license-btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.license-btn.active {
+    background-color: #009688;
+    color: #fff;
+}
+
+.toggles {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+}
+
+.toggle label {
+    margin-right: 10px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+/* .input-container i {
+    
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+} 
+*/
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.input-wrapper {
+    .input-wrapper input {
+        width: 100%;
+        padding: 10px 40px 10px 10px;
+        /* Padding for the icon space inside the input */
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+}
+
+input[type="text"],
+select {
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="date"],
+select {
+    width: 40%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-status {
+    display: flex;
+    max-width: 40%;
+    justify-content: space-between;
+}
+
+.available {
+    color: green;
+}
+
+.forthcoming {
+    color: orange;
+}
+
+.invalid {
+    color: red;
+}
+
+.drm-policies h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.drm-policies .policy {
+    display: flex;
+    max-width: 40%;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    /* justify-content: center; */
+}
+
+.drm-policies .content {
+    font-weight: 200;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}
+
+
+.drm-policies a {
+    color: #009688;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.save-btn {
+    background-color: #009688;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.cancel-btn {
+    background-color: #e0e0e0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.required {
+    color: red;
+    margin-left: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+}
+
+input[disabled] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
