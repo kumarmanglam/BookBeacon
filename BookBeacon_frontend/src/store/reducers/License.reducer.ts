@@ -13,7 +13,8 @@ interface state {
     bundleName: any,
     bundleId: any,
     isEditing: any,
-    custom: any
+    custom: any,
+    newLicenseData: any
 }
 const initialState: state = {
     licenses: [],
@@ -28,6 +29,14 @@ const initialState: state = {
     bundleId: "",
     isEditing: false,
     custom: "default",
+    newLicenseData: {
+        "license_name": "",
+        "bundle_id": "",
+        "mode": "premium",
+        "start_date": "",
+        "end_date": "",
+        "purchase_date": "",
+    },
 };
 
 const LicenseReducer = createSlice({
@@ -69,9 +78,23 @@ const LicenseReducer = createSlice({
         },
         setCustom: (state, action) => {
             state.custom = action.payload;
-        }
+        },
+        setNewLicenseData: (state, action: any) => {
+            console.log(action.payload);
+            let data = state.newLicenseData;
+            const name = action.payload.name;
+            const value = action.payload.value;
+            let ob: any = {};
+            ob[`${name}`] = value
+            console.log(ob);
+            data[`${name}`] = value
+            state.newLicenseData = data;
+        },
+        setBundleName: (state, action) => {
+            state.bundleName = action.payload;
+        },
     }
 })
 
-export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, addUpdatedBooks, setBooksInBundle} = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData,setBundleName } = LicenseReducer.actions;
 export default LicenseReducer.reducer;
