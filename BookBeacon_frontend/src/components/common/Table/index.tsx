@@ -21,6 +21,9 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
         }
         dispatch(updateLicenseBooksInBundle(data));
     }
+    function handleBlur() {
+
+    }
     return (
         <table className="table">
             <thead>
@@ -62,6 +65,11 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
                                                     type="number"
                                                     value={item.concurrency}
                                                     className="concurrency-input"
+                                                    onBlur={(e: any) => {
+                                                        if (e.target.value == "") {
+                                                            callSetUpdateLicense(item.book_id, 0)
+                                                        }
+                                                    }}
                                                     onChange={(e: any) => callSetUpdateLicense(item.book_id, e.target.value)}
                                                 />
                                             </td>

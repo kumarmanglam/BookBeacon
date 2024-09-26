@@ -13,8 +13,8 @@ import { booksData } from './data';
 import { fetchBooksById } from '../../services/bundleRough';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLicenseState } from '../../store/selectors/License.selector';
-import { setCustom, setLicenceBooksInBundle } from '../../store/reducers/License.reducer';
-import { editLicenseCustomVariable } from '../../services/license';
+import { setConcurrency, setCustom, setLicenceBooksInBundle } from '../../store/reducers/License.reducer';
+import { editLicenseCustomDefault, editLicenseCustomVariable } from '../../services/license';
 import { useNavigate } from 'react-router-dom';
 
 const ConcurrencyPage = () => {
@@ -51,6 +51,7 @@ const ConcurrencyPage = () => {
       concurrency: Number(bulkEditValue),
     }));
     dispatch(setLicenceBooksInBundle(updatedData));
+    dispatch(setConcurrency(Number(bulkEditValue)));
     setIsBulkSave(true);
     // in redux we will update the concurrency
     // dispatch(setConcurrency(Number(bulkEditValue)));
@@ -80,9 +81,11 @@ const ConcurrencyPage = () => {
     if (isEditing == false) {// Is new License
       if (isBulkSave) { // bulk concurrency save
         dispatch(setCustom("default"));
+        navigate("/createLicense");
         // 
       } else { // variable update
         dispatch(setCustom("variable"));
+        navigate("/createLicense");
       }
       navigate("/createLicense")
     } else { // Is editing
@@ -92,7 +95,7 @@ const ConcurrencyPage = () => {
           licenseId: "",
           concurrency: bulkEditValue
         }
-        await editLicenseCustomVariable(EditData1);
+        await editLicenseCustomDefault(EditData1);
       } else { // variable concurrency edit // custom variable
         // call the varibale concurrency update API
         let EditData2 = {

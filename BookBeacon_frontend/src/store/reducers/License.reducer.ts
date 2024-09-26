@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { enableMapSet } from 'immer';
+enableMapSet();
 interface state {
     licenses: any,
     currentLicense: any,
@@ -21,7 +23,7 @@ const initialState: state = {
     concurrency: 1,
     booksInBundle: [],
     licenceBooksInBundle: [],
-    collectUpdatedBooks: [],
+    collectUpdatedBooks: {}, // should be like set (no duplicates object by book_id)
     bundleName: "",
     bundleId: "",
     isEditing: false,
@@ -52,9 +54,9 @@ const LicenseReducer = createSlice({
             let books: any = state.licenceBooksInBundle?.map((item: any) => {
                 if (item?.book_id == book_id) {
                     item.concurrency = concurrency;
-                    let updatedBooks = state.collectUpdatedBooks
-                    updatedBooks.push(item);
-                    state.collectUpdatedBooks = updatedBooks;
+                    // let updatedBooks = state.collectUpdatedBooks
+                    // updatedBooks[item?.book_id] = item;
+                    state.collectUpdatedBooks[item?.book_id] = item;
                     return item;
                 }
                 return item
@@ -62,17 +64,12 @@ const LicenseReducer = createSlice({
             console.log(books);
             state.licenceBooksInBundle = books;
         },
-        addUpdatedBooks: (state, action) => {
-            const data: any = state.licenceBooksInBundle;
-            data.push(action.payload);
-            state.licenceBooksInBundle = data;
-        },
         setCustom: (state, action) => {
             state.custom = action.payload;
         }
     }
 })
 
-export const { setLicense, setAllLicense, setLicenceBooksInBundle, updateLicenseBooksInBundle, addUpdatedBooks, setCustom } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom } = LicenseReducer.actions;
 
 export default LicenseReducer.reducer;
