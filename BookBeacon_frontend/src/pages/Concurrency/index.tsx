@@ -3,61 +3,88 @@
 
 import './style.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Navbar from '../../components/common/Navbar';
 import Table from '../../components/common/Table';
 import { TABLE_HEADER_CONFIG_CONCURRENCY } from '../../config/tableConfig';
 import ButtonGroup from './create_button';
 import { booksData } from './data';
+import { fetchBooksById } from '../../services/bundleRough';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLicenseState } from '../../store/selectors/License.selector';
+import { setLicenceBooksInBundle } from '../../store/reducers/License.reducer';
 
 const ConcurrencyPage = () => {
-  const [data, setData] = useState(booksData);
-  const [bulkEditValue, setBulkEditValue] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  const dispatch = useDispatch();
+  // const [data, setData] = useState<any>([]);
+  const resp = useSelector(selectLicenseState);
+  const licenceBooksInBundle = resp.licenceBooksInBundle;
 
-  const handleConcurrencyChange = (index: number, value: string) => {
-    const newData = [...data];
-    newData[index].concurrency = Number(value);
-    setData(newData);
-  };
+  const [bulkEditValue, setBulkEditValue] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isBulkSave, setIsBulkSave] = useState<boolean>(false);
+  const [updatedBooksList, setUpdatedBooksList] = useState<any>([]);
+
+  // const handleConcurrencyChange = (index: number, value: string) => {
+  //   const bundles = [...data];
+  //   bundles[index].concurrency = Number(value);
+
+  //   const newBundle = [];
+  //   let updatedBook = {};
+  //   setUpdatedBooksList((prev: any) => [...prev, updatedBook]);
+  //   dispatch(setLicenceBooksInBundle(updatedData));
+  // };
 
   const handleBulkEdit = () => {
     setShowPopup(true);
   };
 
   const handleBulkSave = () => {
-    const updatedData = data.map((book: any) => ({
+    const updatedData = licenceBooksInBundle.map((book: any) => ({
       ...book,
       concurrency: Number(bulkEditValue),
     }));
-    setData(updatedData);
+    dispatch(setLicenceBooksInBundle(updatedData));
+    // in redux we will update the concurrency
+    // dispatch(setConcurrency(Number(bulkEditValue)));
     setShowPopup(false);
   };
+
+  //  when variable concurrency update...........
+
+
+  const callFetchBunldeByBundleId = async () => {
+    console.log("funcation ran")
+    const bunldeById = await fetchBooksById(19);
+    console.log(bunldeById);
+    const bunldeBooks = bunldeById.data.booksInBundle.map((item: any) => {
+      item.concurrency = 1;
+      return item;
+    })
+    console.log(bunldeBooks);
+    dispatch(setLicenceBooksInBundle(bunldeBooks));
+  }
+
+  useEffect(() => {
+    callFetchBunldeByBundleId();
+  }, [])
 
   return (
     <div>
       <Navbar />
-      <ButtonGroup />
+      <div className='concurrency-action'>
+        <a onClick={handleBulkEdit} className="bulk-edit-link">Bulk Edit</a>
+        <ButtonGroup />
+      </div>
+
       <div className="concurrency-container">
+
         <div className="table-container">
           <Table
             headerConfig={TABLE_HEADER_CONFIG_CONCURRENCY}
-            data={data.map((book: { book_name: any; concurrency: string | number | readonly string[] | undefined; }, index: number) => ({
-              book_name: book.book_name,
-              concurrency: (
-                <input
-                  type="number"
-                  value={book.concurrency}
-                  onChange={(e) => handleConcurrencyChange(index, e.target.value)}
-                  className="concurrency-input"
-                />
-              ),
-            }))}
+            data={licenceBooksInBundle}
           />
-        </div>
-        <div className="bulk-edit-container">
-          <a onClick={handleBulkEdit} className="bulk-edit-link">Bulk Edit</a>
         </div>
       </div>
 

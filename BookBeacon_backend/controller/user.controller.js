@@ -4,9 +4,10 @@ const { generateToken } = require("../utils/auth");
 
 const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log(password)
 
     try {
-        console.log(email);
+        // console.log(email);
         const user = await User.findOne({ email });
 
         if (!user) {
