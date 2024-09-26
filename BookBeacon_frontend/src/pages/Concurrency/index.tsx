@@ -21,8 +21,8 @@ const ConcurrencyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const [data, setData] = useState<any>([]);
-  const resp = useSelector(selectLicenseState);
-  const licenceBooksInBundle = resp.licenceBooksInBundle;
+  const licenseState = useSelector(selectLicenseState);
+  const licenceBooksInBundle = licenseState.licenceBooksInBundle;
 
   const [bulkEditValue, setBulkEditValue] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
@@ -62,18 +62,30 @@ const ConcurrencyPage = () => {
 
 
   const callFetchBunldeByBundleId = async () => {
-    console.log("funcation ran")
-    const bunldeById = await fetchBooksById(19);
-    // console.log(bunldeById);
-    const bunldeBooks = bunldeById.data.booksInBundle.map((item: any) => {
-      item.concurrency = 1;
-      return item;
-    })
-    console.log(bunldeBooks);
-    dispatch(setLicenceBooksInBundle(bunldeBooks));
+    if (licenseState.isEditing) {
+      console.log(licenseState.isEditing);
+      const bookss = licenseState.booksInBundle;
+
+    }
+    else {
+      console.log(licenseState.isEditing);
+      console.log("funcation ran");
+
+      const bunldeById = await fetchBooksById(19);
+      let bundleBooks = licenseState.booksInBundle
+      // console.log(bunldeById);
+      const books = bundleBooks.map((item: any) => {
+        item.concurrency = 1;
+        return item;
+      })
+      console.log(books);
+      dispatch(setLicenceBooksInBundle(books));
+
+    }
   }
 
   useEffect(() => {
+    console.log("use effect ran")
     callFetchBunldeByBundleId();
   }, [])
 
