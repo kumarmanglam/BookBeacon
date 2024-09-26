@@ -4,9 +4,9 @@ import Navbar from "../../components/common/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
+
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
 import { setBooksInBundle } from "../../store/reducers/License.reducer";
-
 
 
 const debounce = (func, delay) => {
@@ -22,11 +22,10 @@ const debounce = (func, delay) => {
 };
 
 const CreateLicense = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const today = new Date().toISOString().split("T")[0];
-
-  const [mode, setMode] = useState("premium");
+  const [mode, setMode] = useState("Premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -149,7 +148,7 @@ const CreateLicense = () => {
   // setFilteredBundles(filteredList)
   // }
   return (
-    <>
+    <div>
       <Navbar />
       <h1 className="container-title">LICENSE DETAILS</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -222,14 +221,11 @@ const CreateLicense = () => {
             />
           </div>
 
-        </div>
-        <h1 className="container-title">PRODUCT BUNDLE</h1>
-        <div className="container">
 
-          {/* <!-- Product Bundle --> */}
-          <div className="form-section">
-            <label htmlFor="bundle-name">Product Bundle <span className="required">*</span> </label>
-            <div className="input-container">
+
+              <label htmlFor="start-date">
+                Select Start Date <span className="required">*</span>
+              </label>
               <input
                 type="text"
                 id="bundle-name"
@@ -239,26 +235,50 @@ const CreateLicense = () => {
                 placeholder="Search by Bundle Name"
                 disabled={!!selectedBundle}
               />
-              {!selectedBundle && <i className="fa fa-search"></i>}
-              {selectedBundle && <i className="clear-icon" onClick={handleClearBundle}>✖</i>}
             </div>
-            {filteredBundles.length > 0 && (
-              <ul className="bundle-list">
-                {filteredBundles.map((bundle, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleBundleClick(bundle)}
-                    className="bundle-item"
-                  >
-                    {bundle.bundle_Name}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {selectedBundle && (
-              <div className="selected-bundle">
-                <strong>Selected Bundle: </strong> {selectedBundle}
+
+          </div>
+          <div className="container">
+
+            <h1 className="container-title">PRODUCT BUNDLE</h1>
+            {/* <!-- Product Bundle --> */}
+            <div className="form-section">
+              <label htmlFor="bundle-name">Product Bundle <span className="required">*</span> </label>
+              <div className="input-container">
+                <input
+                  type="text"
+                  id="bundle-name"
+                  value={query}
+                  onChange={handleInputChange}
+                  placeholder="Search by Bundle Name"
+                  disabled={!!selectedBundle}
+                />
+                {!selectedBundle && <i className="fa fa-search"></i>}
+                {selectedBundle && <i className="clear-icon" onClick={handleClearBundle}>✖</i>}
               </div>
+              {filteredBundles.length > 0 && (
+                <ul className="bundle-list">
+                  {filteredBundles.map((bundle, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleBundleClick(bundle)}
+                      className="bundle-item"
+                    >
+                      {bundle.bundle_Name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {selectedBundle && (
+                <div className="selected-bundle">
+                  <strong>Selected Bundle: </strong> {selectedBundle}
+                </div>
+              )}
+<!--               <div className="product-status">
+                <span className="available">Available: 2</span>
+                <span className="forthcoming">Forthcoming: 0</span>
+                <span className="invalid">Invalid: 0</span>
+              </div> -->
             )}
             {/* <div className="product-status">
               <span className="available">Available: 2</span>
@@ -277,6 +297,7 @@ const CreateLicense = () => {
             </div>
           )}
           {selectedBundle && (
+
             <div className="form-section drm-policies">
               <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
               <div className="policy">
@@ -295,16 +316,18 @@ const CreateLicense = () => {
             <a href="/editConcurracy">View/Edit concurrency per title</a>
           </div> */}
 
-          {/* <!-- Save/Cancel Buttons --> */}
+
+            {/* <!-- Save/Cancel Buttons --> */}
+
 
         </div >
         <div className="form-section buttons">
           <button className="save-btn" type="submit"> Save</button>
           <button className="cancel-btn" type="reset" onClick={() => handleReset()}> Cancel</button>
         </div>
-
-      </form>
-    </>
+        </form>
+      </div>
+    </div>
   );
 };
 
