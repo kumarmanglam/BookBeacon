@@ -29,6 +29,8 @@ const ConcurrencyPage = () => {
   const [isBulkSave, setIsBulkSave] = useState<boolean>(false);
   const [updatedBooksList, setUpdatedBooksList] = useState<any>([]);
 
+  const [localTableData, setLocalTableData] = useState<any>([]);
+
   const isEditing = useSelector(selectLicenseState).isEditing;
 
   // const handleConcurrencyChange = (index: number, value: string) => {
@@ -64,23 +66,33 @@ const ConcurrencyPage = () => {
   const callFetchBunldeByBundleId = async () => {
     if (licenseState.isEditing) {
       console.log(licenseState.isEditing);
-      const bookss = licenseState.booksInBundle;
-
+      console.log(licenseState);
+      const books = licenseState.licenceBooksInBundle;
+      console.log(books);
+      setLocalTableData(books);
     }
-    else {
+    else { // while Saving
       console.log(licenseState.isEditing);
-      console.log("funcation ran");
+      console.log("while saving ran");
+      let bundleBooks = [...licenceBooksInBundle];
 
-      const bunldeById = await fetchBooksById(19);
-      let bundleBooks = licenseState.booksInBundle
       // console.log(bunldeById);
       const books = bundleBooks.map((item: any) => {
-        item.concurrency = 1;
-        return item;
+        console.log(item);
+        let newItem = { ...item };
+        // item["concurrency"] = 1;
+        console.log(item.is_Premium)
+        if (item.is_Premium === true) {
+          newItem.concurrency = 1;
+        } else {
+          newItem.concurrency = -1;
+        }
+        return newItem;
       })
       console.log(books);
       dispatch(setLicenceBooksInBundle(books));
-
+      setLocalTableData(books);
+      console.log(localTableData);
     }
   }
 
@@ -101,17 +113,18 @@ const ConcurrencyPage = () => {
       }
       navigate("/createLicense")
     } else { // Is editing
+      let license_id = licenseState.license_id;
       if (isBulkSave) { // bulk concurrency edit  // custom default
         // call the bulk concurrency update API
         let EditData1 = {
-          licenseId: "",
+          licenseId: license_id,
           concurrency: bulkEditValue
         }
         await editLicenseCustomDefault(EditData1);
       } else { // variable concurrency edit // custom variable
         // call the varibale concurrency update API
         let EditData2 = {
-          licenseId: "",
+          licenseId: license_id,
           booksInBUndle: updatedBooksList,
         }
         await editLicenseCustomVariable(EditData2);
@@ -140,7 +153,7 @@ const ConcurrencyPage = () => {
           <div className="table-container">
             <Table
               headerConfig={TABLE_HEADER_CONFIG_CONCURRENCY}
-              data={licenceBooksInBundle}
+              data={localTableData}
             />
           </div>
         </div>

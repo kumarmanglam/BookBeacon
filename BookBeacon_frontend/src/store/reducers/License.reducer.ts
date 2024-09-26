@@ -12,6 +12,7 @@ interface state {
     collectUpdatedBooks: any,
     bundleName: any,
     bundleId: any,
+    licenseId: any,
     isEditing: any,
     custom: any,
     newLicenseData: any
@@ -28,6 +29,7 @@ const initialState: state = {
     collectUpdatedBooks: {}, // should be like set (no duplicates object by book_id)
     bundleName: "",
     bundleId: "",
+    licenseId: "",
     isEditing: false,
     custom: "default",
     newLicenseData: {
@@ -97,10 +99,13 @@ const LicenseReducer = createSlice({
         },
         setIsEditing: (state, action) => {
             state.isEditing = action.payload;
+        },
+        setLicenseId: (state, action) => {
+            state.licenseId = action.payload
         }
     }
 })
 
 
-export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setLicenseId } = LicenseReducer.actions;
 export default LicenseReducer.reducer;
