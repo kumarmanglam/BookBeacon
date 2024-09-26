@@ -26,7 +26,7 @@ const CreateLicense = () => {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [mode, setMode] = useState("Premium");
+  const [mode, setMode] = useState("premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -119,6 +119,8 @@ const CreateLicense = () => {
     // "concurrency": LicenseReduxState.concurrency,
     if (LicenseReduxState.isVariableConcurrency) {
       //we will updated books ()
+      console.log("variable ran");
+
 
       data.booksInBundle = LicenseReduxState.booksInBundle;
 
@@ -129,9 +131,13 @@ const CreateLicense = () => {
 
     }
     else { // single concurrency update 
+
+      console.log("single concurrency ran")
       data.concurrency = LicenseReduxState.concurrency;
 
-      await createLicense(data, "default");
+
+      const response = await createLicense(data, "default");
+      console.log(response)
 
     }
     console.log(data);
@@ -150,9 +156,9 @@ const CreateLicense = () => {
         <div className="container">
           <div className="license-type">
             <button
-              className={`license-btn ${mode === "Premium" ? "active" : ""
+              className={`license-btn ${mode === "premium" ? "active" : ""
                 }`}
-              onClick={() => handleLicenseSelection("Premium")}
+              onClick={() => handleLicenseSelection("premium")}
             >
               Premium
             </button>
