@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import "./index.css";
 import Navbar from "../../components/common/Navbar";
-import filteredData from "../ViewLicenses/data";
-import { useSelector } from "react-redux";
-import { selectLicenseState } from "../../store/selectors/License.selector";
+import { useDispatch, useSelector } from "react-redux";
+import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
-import { searchBundles } from "../../services/bundle";
+import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
+import { setBooksInBundle } from "../../store/reducers/License.reducer";
 
-const bundleNames = [
-  "ariddles24", "ngilderoyy", "kbrandi0", "bgariff3", "ramorta", "kbrandi0", "lironl",
-  "cmeir1", "ariddles24", "bgariff3", "msuthren6", "ramorta", "kbrandi0", "smccooked",
-  "bgariff3", "bgariff3", "rvickerstaffb", "smccooked", "kbrandi0", "jtonner2", "lironl",
-  "bgariff3", "rvickerstaffb", "ramorta", "cmeir1", "mgregoraceo", "lironl", "lironl",
-  "rvickerstaffb", "iiskow14", "ngilderoyy", "rblint5", "hflasby1v", "smccooked",
-  "rvickerstaffb", "rvickerstaffb", "mgregoraceo", "rblint5", "hflasby1v", "ngilderoyy",
-  "kbrandi0"
-];
+
 
 const debounce = (func, delay) => {
   let timeoutId = delay;
@@ -30,38 +22,33 @@ const debounce = (func, delay) => {
 };
 
 const CreateLicense = () => {
+  const dispatch = useDispatch();
+
+  const today = new Date().toISOString().split("T")[0];
 
   const [mode, setMode] = useState("premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [purchaseDate, setPurchaseDate] = useState("");
+  const [purchaseDate, setPurchaseDate] = useState(today);
   const [selectedBundle, setSelectedBundle] = useState("");
   const [selectedBundleId, setSelectedBundleID] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
-
   const [query, setQuery] = useState("");
   const [filteredBundles, setFilteredBundles] = useState([]);
-
-  const [formData, setFormData] = useState<any>({});
-
   const LicenseReduxState = useSelector(selectLicenseState);
 
   // Function to handle search and filtering
   const handleSearch = debounce(async (input: any) => {
-    // if (input.length < 3) {
-    //   setFilteredBundles([]); // If input is less than 3 characters, don't show suggestions
-    //   return;
-    // }
-    // const lowerCaseInput = input.toLowerCase();
+    if (input.length < 3) {
+      setFilteredBundles([]); // If input is less than 3 characters, don't show suggestions
+      return;
+    }
     const results = await searchBundles(input);
     console.log(results);
     const bundles = results.data;
 
     setFilteredBundles(bundles);
-
-
 
   }, 300); // Delay of 300ms for debouncing
 
@@ -70,16 +57,21 @@ const CreateLicense = () => {
     handleSearch(event.target.value); // Trigger the debounced search
   };
 
-  const handleBundleClick = (bundle: any) => {
-    console.log(bundle);
-    // setSelectedBundle(bundle);
+  const booksInBundleSSS = useSelector(selectbooksInBundle);
+
+  const handleBundleClick = async (bundle: any) => {
+
+    setSelectedBundle(bundle.bundle_Name);
     setSelectedBundleID(bundle.bundle_id);
-    console.log(selectedBundleId);
-    // setQuery(bundle); // Set the input value to the selected bundle
-    setFilteredBundles([]); // Clear the suggestions once a bundle is selected
+    const response = await getBooksbyBundleId(bundle.bundle_id);
+    dispatch(setBooksInBundle(response.data.booksInBundle));
+    console.log(booksInBundleSSS);
+    console.log(response.data.booksInBundle);
+    setQuery(bundle.bundle_Name);
+    setFilteredBundles([])
+
   };
 
-  const today = new Date().toISOString().split("T")[0];
 
   const handleLicenseSelection = (licenseType: string) => {
     setMode(licenseType);
@@ -89,7 +81,6 @@ const CreateLicense = () => {
     const selectedEndDate = event.target.value;
     setEndDate(selectedEndDate);
 
-    // Check if end date is after the start date
     if (startDate && selectedEndDate && selectedEndDate <= startDate) {
       setErrorMessage("End Date must be after Start Date.");
     } else {
@@ -98,17 +89,21 @@ const CreateLicense = () => {
   };
   const handleClearBundle = () => {
     setSelectedBundle("");
+    LicenseReduxState.booksInBundle = [];
     setQuery("");
   };
+  const handleReset = () => {
+    setLicenseName("");
+    setStartDate("");
+    setEndDate("");
+    setPurchaseDate(today);
+    setSelectedBundle("");
+    setMode("Premium");
+    setQuery("");
+  }
 
-  // const handleLicenseType = (
-  //   _event: React.MouseEvent<HTMLElement>,
-  //   newType: string | null
-  // ) => {
-  //   if (newType !== null) {
-  //     setLicenseType(newType);
-  //   }
-  //  };
+  // async function handleSubmit(e: any
+
   async function handleSubmit(e: any) {
     e.preventDefault();
     const data: any = {
@@ -159,7 +154,6 @@ const CreateLicense = () => {
       <h1 className="container-title">LICENSE DETAILS</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="container">
-          {/* <!-- License Type --> */}
           <div className="license-type">
             <button
               className={`license-btn ${mode === "premium" ? "active" : ""
@@ -221,6 +215,7 @@ const CreateLicense = () => {
               type="date"
               id="purchase-date"
               value={purchaseDate}
+              max={today}
               onChange={(e) => setPurchaseDate(e.target.value)}
 
               required
@@ -239,6 +234,7 @@ const CreateLicense = () => {
                 type="text"
                 id="bundle-name"
                 value={query}
+                required
                 onChange={handleInputChange}
                 placeholder="Search by Bundle Name"
                 disabled={!!selectedBundle}
@@ -264,32 +260,47 @@ const CreateLicense = () => {
                 <strong>Selected Bundle: </strong> {selectedBundle}
               </div>
             )}
-            <div className="product-status">
+            {/* <div className="product-status">
               <span className="available">Available: 2</span>
               <span className="forthcoming">Forthcoming: 0</span>
               <span className="invalid">Invalid: 0</span>
-            </div>
+            </div> */}
           </div>
 
           {/* <!-- DRM Policies --> */}
         </div>
         <h1 className="container-title">DRM POLICES</h1>
         <div className="container">
-          <div className="form-section drm-policies">
+          {!selectedBundle && (
+            <div >
+              <p className="required">Please Select a Product Bundle </p>
+            </div>
+          )}
+          {selectedBundle && (
+            <div className="form-section drm-policies">
+              <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
+              <div className="policy">
+                <span>Concurrency: 1</span>
+                <span>Print/Copy: --</span>
+              </div>
+              <a href="/editConcurracy">View/Edit concurrency per title</a>
+            </div>
+          )}
+          {/* <div className="form-section drm-policies">
             <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
             <div className="policy">
               <span>Concurrency: 1</span>
-              <span>Print/Copy: 20</span>
+              <span>Print/Copy: --</span>
             </div>
             <a href="/editConcurracy">View/Edit concurrency per title</a>
-          </div>
+          </div> */}
 
           {/* <!-- Save/Cancel Buttons --> */}
 
         </div >
         <div className="form-section buttons">
-          <button className="save-btn" type="submit">Save</button>
-          <button className="cancel-btn">Cancel</button>
+          <button className="save-btn" type="submit"> Save</button>
+          <button className="cancel-btn" type="reset" onClick={() => handleReset()}> Cancel</button>
         </div>
 
       </form>
