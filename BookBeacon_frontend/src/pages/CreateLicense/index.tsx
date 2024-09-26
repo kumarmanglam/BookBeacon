@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import "./index.css";
 import Navbar from "../../components/common/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import LicenseReducer, { setBooksInBundle } from "../../store/reducers/License.reducer";
+import { setBooksInBundle, setBundleName, setNewLicenseData } from "../../store/reducers/License.reducer";
+import { useNavigate } from "react-router-dom";
 
 
 const debounce = (func, delay) => {
@@ -22,10 +23,11 @@ const debounce = (func, delay) => {
 
 const CreateLicense = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const today = new Date().toISOString().split("T")[0];
 
-  const [mode, setMode] = useState("Premium");
+  const [mode, setMode] = useState("premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -36,6 +38,9 @@ const CreateLicense = () => {
   const [query, setQuery] = useState("");
   const [filteredBundles, setFilteredBundles] = useState([]);
   const LicenseReduxState = useSelector(selectLicenseState);
+
+  const newLicenseData = LicenseReduxState.newLicenseData;
+  const bundleName = LicenseReduxState.bundleName;
 
   // Function to handle search and filtering
   const handleSearch = debounce(async (input: any) => {
@@ -56,12 +61,16 @@ const CreateLicense = () => {
     handleSearch(event.target.value); // Trigger the debounced search
   };
 
-  const booksInBundleSSS = useSelector(selectbooksInBundle);
+  const booksCountInBundle = useSelector(selectbooksInBundle).length;
 
   const handleBundleClick = async (bundle: any) => {
 
     setSelectedBundle(bundle.bundle_Name);
     setSelectedBundleID(bundle.bundle_id);
+
+    dispatch(setBundleName(bundle.bundle_Name));
+
+    dispatch(setNewLicenseData({ name: "bundle_id", value: bundle.bundle_id }));
     const response = await getBooksbyBundleId(bundle.bundle_id);
     dispatch(setBooksInBundle(response.data.booksInBundle));
     console.log(response.data.booksInBundle);
@@ -73,6 +82,7 @@ const CreateLicense = () => {
 
   const handleLicenseSelection = (licenseType: string) => {
     setMode(licenseType);
+    dispatch(setNewLicenseData({ name: "mode", value: licenseType }));
   };
 
   const handleEndDateChange = (event: any) => {
@@ -96,10 +106,16 @@ const CreateLicense = () => {
     setEndDate("");
     setPurchaseDate(today);
     setSelectedBundle("");
-    setMode("Premium");
+    setMode("premium");
     setQuery("");
   }
 
+  useEffect(() => {
+    if (bundleName) {
+      setQuery(bundleName);
+      setSelectedBundle(bundleName);
+    }
+  }, [])
   // async function handleSubmit(e: any
 
   async function handleSubmit(e: any) {
@@ -115,22 +131,19 @@ const CreateLicense = () => {
 
 
     // "concurrency": LicenseReduxState.concurrency,
-    if (LicenseReduxState.isVariableConcurrency) {
-      //we will updated books ()
-
-      data.booksInBundle = LicenseReduxState.booksInBundle;
-
-      const response = await createLicense(data, "variable");
-
+    if (LicenseReduxState.custom == "variable") {
+      let updatedBookList = LicenseReduxState.collectUpdatedBooks; // {bookId: bookOb}
+      const data = { ...newLicenseData };
+      data["booksInBundle"] = Object.values(updatedBookList);
+      const response = await createLicense(newLicenseData, "variable");
       console.log(response)
       //callCreateLicenseAPI(data, variable);
-
     }
     else { // single concurrency update 
-      data.concurrency = LicenseReduxState.concurrency;
-
-      await createLicense(data, "default");
-
+      const data = { ...newLicenseData };
+      data["concurrency"] = LicenseReduxState.concurrency;
+      const response = await createLicense(data, "default");
+      console.log(response)
     }
     console.log(data);
   }
@@ -148,18 +161,20 @@ const CreateLicense = () => {
         <div className="container">
           <div className="license-type">
             <button
-              className={`license-btn ${mode === "Premium" ? "active" : ""
+              className={`license-btn ${mode === "premium" ? "active" : ""
                 }`}
-              onClick={() => handleLicenseSelection("Premium")}
+              onClick={() => handleLicenseSelection("premium")}
+              type="button"
             >
-              Premium
+              premium
             </button>
             <button
-              className={`license-btn ${mode === "Normal" ? "active" : ""
+              className={`license-btn ${mode === "normal" ? "active" : ""
                 }`}
-              onClick={() => handleLicenseSelection("Normal")}
+              onClick={() => handleLicenseSelection("normal")}
+              type="button"
             >
-              Normal
+              normal
             </button>
           </div>
           <div className="form-section">
@@ -169,9 +184,10 @@ const CreateLicense = () => {
             <input
               type="text"
               id="license-name"
+              value={newLicenseData.license_name}
               required
               placeholder="Enter License Name"
-              onChange={(e) => setLicenseName(e.target.value)}
+              onChange={(e) => dispatch(setNewLicenseData({ name: "license_name", value: e.target.value }))}
             />
 
 
@@ -183,8 +199,8 @@ const CreateLicense = () => {
               type="date"
               id="start-date"
               required
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={newLicenseData.start_date}
+              onChange={(e) => dispatch(setNewLicenseData({ name: "start_date", value: e.target.value }))}
             />
 
 
@@ -195,8 +211,8 @@ const CreateLicense = () => {
               type="date"
               id="end-date"
               required
-              value={endDate}
-              onChange={handleEndDateChange}
+              value={newLicenseData.end_date}
+              onChange={(e) => dispatch(setNewLicenseData({ name: "end_date", value: e.target.value }))}
             />
             {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -206,9 +222,9 @@ const CreateLicense = () => {
             <input
               type="date"
               id="purchase-date"
-              value={purchaseDate}
+              value={newLicenseData.purchase_date}
               max={today}
-              onChange={(e) => setPurchaseDate(e.target.value)}
+              onChange={(e) => dispatch(setNewLicenseData({ name: "purchase_date", value: e.target.value }))}
 
               required
             />
@@ -270,12 +286,12 @@ const CreateLicense = () => {
           )}
           {selectedBundle && (
             <div className="form-section drm-policies">
-              <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
+              <div className="content"> {booksCountInBundle} titles are DRM protected. Please review/edit the titles. </div>
               <div className="policy">
                 <span>Concurrency: 1</span>
                 <span>Print/Copy: --</span>
               </div>
-              <a href="/editConcurracy">View/Edit concurrency per title</a>
+              <button onClick={() => navigate("/license")} type="button">View/Edit concurrency per title</button>
             </div>
           )}
           {/* <div className="form-section drm-policies">
