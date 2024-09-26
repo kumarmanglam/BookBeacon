@@ -32,6 +32,7 @@ const Login = () => {
     } catch (err) {
       alert("Invalid credentials, please try again.");
     }
+    navigate('/licenses')
   };
 const navigate=useNavigate()
   return (
@@ -82,9 +83,7 @@ const navigate=useNavigate()
             </div>
 
             <div className="login-submit">
-              <button id="btn" type="submit" value="Sign in" disabled={!isLogButtonActive} onClick={()=>{
-                navigate('/')
-              }}>
+              <button id="btn" type="submit" value="Sign in" disabled={!isLogButtonActive} >
                 Submit
               </button>
             </div>

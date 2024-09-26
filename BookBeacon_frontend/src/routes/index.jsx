@@ -15,8 +15,8 @@ const RouterContainer = () => {
         
         <Routes>
             <Route path='/signup' element={<Signup />}></Route>
-            <Route path='/login' element={<Login />} />
-            <Route path='/' element={<ViewLicenses />} />
+            <Route path='/licenses' element={<ViewLicenses />} />
+            <Route path='/' element={<Login />} />
             <Route path='/booksInLicense' element={<ViewBooksInsideLicense />} />
             <Route path='/license' element={<ConcurrencyPage />} />
             <Route path='/createLicense' element={<CreateLicense />} />
