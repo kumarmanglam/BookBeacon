@@ -73,5 +73,5 @@ const LicenseReducer = createSlice({
     }
 })
 
-export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, addUpdatedBooks, setBooksInBundle} = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle } = LicenseReducer.actions;
 export default LicenseReducer.reducer;
