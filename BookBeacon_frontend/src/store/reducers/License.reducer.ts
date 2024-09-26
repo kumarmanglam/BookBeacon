@@ -16,6 +16,7 @@ interface state {
     custom: any,
     newLicenseData: any
 }
+const today = new Date().toISOString().split("T")[0];
 const initialState: state = {
     licenses: [],
     currentLicense: {},
@@ -35,7 +36,7 @@ const initialState: state = {
         "mode": "premium",
         "start_date": "",
         "end_date": "",
-        "purchase_date": "",
+        "purchase_date": today,
     },
 };
 
@@ -99,6 +100,7 @@ const LicenseReducer = createSlice({
         }
     }
 })
+
 
 export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing } = LicenseReducer.actions;
 export default LicenseReducer.reducer;

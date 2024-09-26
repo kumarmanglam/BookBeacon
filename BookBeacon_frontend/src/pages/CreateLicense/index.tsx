@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import { setBooksInBundle, setBundleName, setNewLicenseData } from "../../store/reducers/License.reducer";
+import { setBooksInBundle, setBundleName, setConcurrency, setCustom, setLicenceBooksInBundle, setNewLicenseData } from "../../store/reducers/License.reducer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -41,6 +41,7 @@ const CreateLicense = () => {
 
   const newLicenseData = LicenseReduxState.newLicenseData;
   const bundleName = LicenseReduxState.bundleName;
+  const concurrency = LicenseReduxState.custom === "default" ? LicenseReduxState.concurrency : "variable";
 
   // Function to handle search and filtering
   const handleSearch = debounce(async (input: any) => {
@@ -72,7 +73,7 @@ const CreateLicense = () => {
 
     dispatch(setNewLicenseData({ name: "bundle_id", value: bundle.bundle_id }));
     const response = await getBooksbyBundleId(bundle.bundle_id);
-    dispatch(setBooksInBundle(response.data.booksInBundle));
+    dispatch(setLicenceBooksInBundle(response.data.booksInBundle));
     console.log(response.data.booksInBundle);
     setQuery(bundle.bundle_Name);
     setFilteredBundles([])
@@ -97,10 +98,21 @@ const CreateLicense = () => {
   };
   const handleClearBundle = () => {
     setSelectedBundle("");
-    LicenseReduxState.booksInBundle = [];
+    dispatch(setBooksInBundle([]));
+    dispatch(setConcurrency(1));
+    dispatch(setBundleName(""));
+    dispatch(setNewLicenseData({ name: "bundle_id", value: "" }));
+    dispatch(setCustom("default"));
     setQuery("");
   };
   const handleReset = () => {
+    handleClearBundle();
+    dispatch(setNewLicenseData({ name: "license_name", value: "" }));
+    dispatch(setNewLicenseData({ name: "start_date", value: "" }));
+    dispatch(setNewLicenseData({ name: "end_date", value: "" }));
+    dispatch(setNewLicenseData({ name: "purchase_date", value: today }));
+
+
     setLicenseName("");
     setStartDate("");
     setEndDate("");
@@ -135,7 +147,7 @@ const CreateLicense = () => {
       let updatedBookList = LicenseReduxState.collectUpdatedBooks; // {bookId: bookOb}
       const data = { ...newLicenseData };
       data["booksInBundle"] = Object.values(updatedBookList);
-      const response = await createLicense(newLicenseData, "variable");
+      const response = await createLicense(data, "variable");
       console.log(response)
       //callCreateLicenseAPI(data, variable);
     }
@@ -145,6 +157,7 @@ const CreateLicense = () => {
       const response = await createLicense(data, "default");
       console.log(response)
     }
+    navigate("/licenses");
     console.log(data);
   }
   // }
@@ -288,7 +301,7 @@ const CreateLicense = () => {
             <div className="form-section drm-policies">
               <div className="content"> {booksCountInBundle} titles are DRM protected. Please review/edit the titles. </div>
               <div className="policy">
-                <span>Concurrency: 1</span>
+                <span>Concurrency: {concurrency}</span>
                 <span>Print/Copy: --</span>
               </div>
               <button onClick={() => navigate("/license")} type="button">View/Edit concurrency per title</button>
