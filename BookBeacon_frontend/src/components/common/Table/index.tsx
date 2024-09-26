@@ -81,7 +81,7 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                 if (val.key === 'edit') {
                   return (
                     <td key={i} className={`${val.classes} table-data`}>
-                      <button onClick={() => navigate("/create-new")}>
+                      <button onClick={() => navigate('/booksInLicense')}>
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                     </td>
