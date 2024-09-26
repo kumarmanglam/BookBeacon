@@ -91,4 +91,28 @@
 
 
 
+.signup-prompt {
+    font-family: Arial, sans-serif; 
+    font-size: 16px; 
+    color: #333; 
+    text-align: center; 
+    margin: 20px 0; 
+  }
+  
+  
+  .signup-prompt a {
+    text-decoration: none; 
+    color: #007BFF; 
+    font-weight: bold; 
+  }
+  
+  
+  .signup-prompt a:hover {
+    text-decoration: underline; 
+    color: #0056b3; 
+  }
+  
+
+
+
 

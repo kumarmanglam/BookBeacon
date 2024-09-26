@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import './styles.css'
 import { callLoginAPI } from "../services/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 export interface loginForm {
   email: string;
   password: string;
@@ -27,12 +27,15 @@ const Login = () => {
       const response = await callLoginAPI(loginForm.email, loginForm.password);
 
       console.log("response token...", response.data.token);
+      console.log(response.status)
 
       sessionStorage.setItem("token", response.data.token);
+      if(response.status===200)
+        navigate('/licenses')
     } catch (err) {
       alert("Invalid credentials, please try again.");
     }
-    navigate('/licenses')
+   
   };
 const navigate=useNavigate()
   return (
@@ -88,6 +91,7 @@ const navigate=useNavigate()
               </button>
             </div>
           </form>
+          <div className="signup-prompt">Do not have an account?<Link to="/signup"><b>SignUp</b></Link></div>
         </div>
       </div>
       </div>
