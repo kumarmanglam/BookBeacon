@@ -105,6 +105,27 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                     </td>
                   );
                 }
+                if (val.key === 'edit') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      <button onClick={() => navigate('/booksInLicense')}>
+                        <FontAwesomeIcon icon={faEdit} />
+                      </button>
+                    </td>
+                  );
+                }
+                if (val.key === 'concurrency') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      <input
+                        type="number"
+                        value={item.concurrency}
+                        className="concurrency-input"
+                        onChange={(e) => handleConcurrencyChange(item.book_id, parseInt(e.target.value))}
+                      />
+                    </td>
+                  );
+                }
                 return (
                   <td key={i} className={`${val.classes} table-data`}>
                     {cellData ?? 'N/A'}
