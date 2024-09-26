@@ -6,3 +6,4 @@ export const createLicense = (data: any, custom: any) => axios.post(`${domain}/l
 export const editLicenseCustomDefault = (data: any) => axios.put(`${domain}/license?custom=default`, { data })
 
 export const editLicenseCustomVariable = (data: any) => axios.put(`${domain}/license?custom=variable`, { data })
+

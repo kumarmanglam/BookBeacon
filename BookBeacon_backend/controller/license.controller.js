@@ -3,14 +3,15 @@ const { License } = require("../models/license");
 const createLicense = async (req, res) => {
     console.log("create lineceses ran");
     try {
-        const data = req.body;
+        const data = req.body.data;
 
         const custom = req.query.custom;
-        console.log(custom)
+        console.log("data....", data);
 
-        const bundleBooksByBundleId = await Bundle.findOne({ bundle_id: Number(req.body.bundle_id) });
+        let bundleBooksByBundleId = await Bundle.findOne({ bundle_id: req.body.data.bundle_id });
+        console.log(bundleBooksByBundleId);
         if (custom == 'default') {
-            if (req.body.mode == "normal") {
+            if (req.body.data.mode == "normal") {
                 const bookList = bundleBooksByBundleId.booksInBundle;
                 const filteredBooks = bookList.filter((book) => book.is_Premium == false);
                 data.booksInBundle = filteredBooks;
@@ -30,7 +31,7 @@ const createLicense = async (req, res) => {
             // create custom book list from bundleId
             // we will data
             console.log("variable case")
-            let variableBundleBooks = req.body.booksInBundle;
+            let variableBundleBooks = req.body.data.booksInBundle;
 
             // create a hashmap of variable bundleBooks -> {key: value} {book_id: concurreny}
             const variableBookConcurrencyMap = new Map();
@@ -96,31 +97,78 @@ const getLicenses = async (req, res) => {
     }
 }
 
-const bulkUpdateLicense = async (req, res) => {
+const EditLicense = async (req, res) => {
+
     try {
-        console.log("inside bulk update")
-        const concurrency = req.body.concurrency;
+        console.log("edit ran");
+        const custom = req.query.custom;
 
-        console.log("concurrency...", concurrency);
+        const license = await License.findById(req.body.license_id);
+        console.log(custom);
+        if (custom == "default") {
+            console.log("inside bulk update")
+            const concurrency = req.body.concurrency;
 
-        const license = await License.findById(req.body.id);
+            console.log("concurrency...", concurrency);
 
-        // console.log("license ", license)
 
-        const books = license.booksInBundle;
 
-        console.log("books inside bundle ", books)
+            // console.log("license ", license)
 
-        for (let book of books) {
-            book.concurrency = concurrency;
-            console.log(book.concurrency = concurrency);
+            const books = license.booksInBundle;
+
+            console.log("books inside bundle ", books)
+
+            for (let book of books) {
+                if (book.is_Premium) {
+                    book.concurrency = concurrency;
+                }
+                else {
+                    book.concurrency = -1;
+                }
+            }
+            console.log(books)
+            license.booksInBundle = books;
+            res.status(200).json(license);
         }
 
-        res.status(200).json(license);
+        else {
+            console.log("else condition")
+            const variableConcurrencybooksInBundle = req.body.booksInBundle;
+            console.log(variableConcurrencybooksInBundle);
+            const variableBookConcurrencyMap = new Map();
 
+            variableConcurrencybooksInBundle.forEach(item => variableBookConcurrencyMap.set(Number(item.book_id), item.concurrency));
+            console.log(variableBookConcurrencyMap);
+            const bundleBooks = license.booksInBundle;
+
+            const updatedBundleBooksConcurrency = bundleBooks.map((book) => {
+                console.log(book.book_id)
+                console.log(variableBookConcurrencyMap.has(Number(book.book_id)))
+                if (variableBookConcurrencyMap.has(book.book_id)) {
+                    console.log(variableBookConcurrencyMap.has(book.book_id));
+                    book.concurrency = variableBookConcurrencyMap.get(book.book_id);
+                    console.log(book);
+                    return book;
+                } else {
+                    if (book.is_Premium) {
+                        book.concurrency = 1;
+                    } else {
+                        book.concurrency = -1;
+                    }
+                    // console.log(book);
+                    return book;
+                }
+            });
+
+            bundleBooks.booksInBundle = updatedBundleBooksConcurrency;
+            license.booksInBundle = updatedBundleBooksConcurrency;
+            res.status(200).json(license);
+        }
 
     } catch (err) {
-        res.status(500).json("error in bulk license update ", err)
+        res.status(500).json("error in bulk license update ", err);
+        console.log(err)
     }
 }
 
@@ -153,5 +201,5 @@ const UpdateBookConcurrencyInLicense = async (req, res) => {
     }
 }
 
-module.exports = { createLicense, getLicenseById, getLicenses, bulkUpdateLicense, UpdateBookConcurrencyInLicense };
+module.exports = { createLicense, getLicenseById, getLicenses, EditLicense, UpdateBookConcurrencyInLicense };
 

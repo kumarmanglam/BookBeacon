@@ -1,18 +1,29 @@
-
-import { json } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import "./style.css";
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from "react-redux";
 import { updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
-interface prop {
-    headerConfig: any,
-    data: any
+import "./style.css";
+
+// Define types for props
+interface HeaderConfigItem {
+  key: string;
+  label: string;
+  classes?: string;
 }
 
-const Table: React.FC<prop> = ({ headerConfig, data }) => {
-    const dispatch = useDispatch();
+interface DataItem {
+  [key: string]: any;
+}
+
+interface TableProps {
+  headerConfig: HeaderConfigItem[];
+  data: DataItem[];
+}
+
+const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
     function callSetUpdateLicense(id: number, concurrency: number) {
         const data = {
@@ -43,19 +54,10 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
                             {
                                 headerConfig.map((val: any, i: any) => {
                                     const cellData = item[val["key"]];
-                                    if (val.key === 'license_name') {
-                                        return (
-                                            <td key={i} className={`${val.classes} table-data`}>
-                                                <Link to={`/licenses/${item.id}`} className="text-blue-500 hover:underline">
-                                                    {cellData}
-                                                </Link>
-                                            </td>
-                                        );
-                                    }
                                     if (val.key === 'edit') {
                                         return (
-                                            <td key={i} className={`${val.classes} table-data`}>
-                                                <button ><FontAwesomeIcon icon={faEllipsis} /></button>
+                                            <td key={i} className={`${val.classes}  table-data`}>
+                                                <button onClick={() => navigate("/license")}><FontAwesomeIcon icon={faEdit} /></button>
                                             </td>
                                         );
                                     } if (val.key === 'concurrency') {
@@ -75,19 +77,52 @@ const Table: React.FC<prop> = ({ headerConfig, data }) => {
                                             </td>
                                         );
                                     }
-                                    return (
-                                        <td key={i} className={`${item.classes} table-data`}>
-                                            {cellData !== -1 ? cellData : 'N/A'}
-                                        </td>
-                                    );
-                                })
-                            }
-                        </tr>
-                    ))
+                if (val.key === 'license_name') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      {cellData}
+                    </td>
+                  );
                 }
-            </tbody>
-        </table>
-    )
+                if (val.key === 'mode') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      {cellData}
+                    </td>
+                  );
+                }
+                if (val.key === 'start_date') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      {cellData}
+                    </td>
+                  );
+                }
+                if (val.key === 'end_date') {
+                  return (
+                    <td key={i} className={`${val.classes} table-data`}>
+                      {cellData}
+                    </td>
+                  );
+                }
+                return (
+                  <td key={i} className={`${val.classes} table-data`}>
+                    {cellData ?? 'N/A'}
+                  </td>
+                );
+              })}
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan={headerConfig.length} className="text-center">
+              No data available.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  );
 }
 
-export default Table
+export default Table;

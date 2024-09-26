@@ -69,10 +69,6 @@ input[type="checkbox"] {
     height: 20px;
 }
 
-hr {
-    margin: 20px 0;
-}
-
 .form-section {
     margin-bottom: 20px;
 }
@@ -88,6 +84,27 @@ hr {
     cursor: pointer;
 } 
 */
+.bundle-list {
+    width: 50%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+}
+
+.bundle-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+.bundle-item:hover {
+    background-color: #f4f4f4;
+}
 
 label {
     display: block;
@@ -99,7 +116,6 @@ label {
     .input-wrapper input {
         width: 100%;
         padding: 10px 40px 10px 10px;
-        /* Padding for the icon space inside the input */
         font-size: 16px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -152,7 +168,6 @@ select {
     max-width: 40%;
     justify-content: space-between;
     margin-bottom: 30px;
-    /* justify-content: center; */
 }
 
 .drm-policies .content {
@@ -183,6 +198,11 @@ select {
     border-radius: 4px;
     cursor: pointer;
     margin-right: 10px;
+    opacity: 0.8;
+}
+
+.save-btn:hover {
+    opacity: 1;
 }
 
 .cancel-btn {
@@ -192,6 +212,11 @@ select {
     border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
+    opacity: 0.8;
+}
+
+.cancel-btn:hover {
+    opacity: 1;
 }
 
 .required {
