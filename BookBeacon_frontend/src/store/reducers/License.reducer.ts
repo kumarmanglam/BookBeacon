@@ -77,6 +77,15 @@ const LicenseReducer = createSlice({
             console.log(books);
             state.licenceBooksInBundle = books;
         },
+        setCollectUpdatedBooks: (state, action) => {
+            state.collectUpdatedBooks = action.payload;
+        },
+        setBundleId: (state, action) => {
+            state.bundleId = action.payload;
+        },
+        setIsEditing: (state, action) => {
+            state.isEditing = action.payload;
+        },
         setCustom: (state, action) => {
             state.custom = action.payload;
         },
@@ -97,5 +106,5 @@ const LicenseReducer = createSlice({
     }
 })
 
-export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName,setCollectUpdatedBooks } = LicenseReducer.actions;
 export default LicenseReducer.reducer;

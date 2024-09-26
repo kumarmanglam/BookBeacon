@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import { setBooksInBundle, setBundleName, setConcurrency, setCustom, setLicenceBooksInBundle, setNewLicenseData } from "../../store/reducers/License.reducer";
+import { setBundleName, setCollectUpdatedBooks, setConcurrency, setCustom, setLicenceBooksInBundle, setNewLicenseData, updateLicenseBooksInBundle } from "../../store/reducers/License.reducer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -38,12 +38,10 @@ const CreateLicense = () => {
   const [query, setQuery] = useState("");
   const [filteredBundles, setFilteredBundles] = useState([]);
   const LicenseReduxState = useSelector(selectLicenseState);
-
   const newLicenseData = LicenseReduxState.newLicenseData;
   const bundleName = LicenseReduxState.bundleName;
   const concurrency = LicenseReduxState.custom === "default" ? LicenseReduxState.concurrency : "variable";
 
-  // Function to handle search and filtering
   const handleSearch = debounce(async (input: any) => {
     if (input.length < 3) {
       setFilteredBundles([]); // If input is less than 3 characters, don't show suggestions
@@ -55,7 +53,7 @@ const CreateLicense = () => {
 
     setFilteredBundles(bundles);
 
-  }, 300); // Delay of 300ms for debouncing
+  }, 300);
 
   const handleInputChange = (event: any) => {
     setQuery(event.target.value);
@@ -86,19 +84,26 @@ const CreateLicense = () => {
     dispatch(setNewLicenseData({ name: "mode", value: licenseType }));
   };
 
-  const handleEndDateChange = (event: any) => {
-    const selectedEndDate = event.target.value;
-    setEndDate(selectedEndDate);
+  const handleEndDateChange = () => {
+    const selectedEndDate = newLicenseData.end_date;
 
-    if (startDate && selectedEndDate && selectedEndDate <= startDate) {
-      setErrorMessage("End Date must be after Start Date.");
+    setEndDate(selectedEndDate);
+    setStartDate(newLicenseData.start_date);
+    // console.log(newLicenseData.start_date,'anish');
+    console.log(startDate, endDate, "bdcj");
+    if (newLicenseData.start_date && newLicenseData.end_date && newLicenseData.end_date <= newLicenseData.start_date) {
+      dispatch(setNewLicenseData({ name: "end_date", value: "" }));
+      setEndDate("");
+      setErrorMessage("");
+      // setErrorMessage("End Date must be after Start Date.");
+      alert("End Date must be after Start Date.");
     } else {
       setErrorMessage("");
     }
   };
   const handleClearBundle = () => {
     setSelectedBundle("");
-    dispatch(setBooksInBundle([]));
+    dispatch(setLicenceBooksInBundle([]));
     dispatch(setConcurrency(1));
     dispatch(setBundleName(""));
     dispatch(setNewLicenseData({ name: "bundle_id", value: "" }));
@@ -111,6 +116,8 @@ const CreateLicense = () => {
     dispatch(setNewLicenseData({ name: "start_date", value: "" }));
     dispatch(setNewLicenseData({ name: "end_date", value: "" }));
     dispatch(setNewLicenseData({ name: "purchase_date", value: today }));
+    dispatch(setCollectUpdatedBooks({})); 
+    // fix this issue
 
 
     setLicenseName("");
@@ -128,9 +135,10 @@ const CreateLicense = () => {
       setSelectedBundle(bundleName);
     }
   }, [])
-  // async function handleSubmit(e: any
 
   async function handleSubmit(e: any) {
+    handleEndDateChange();
+
     e.preventDefault();
     const data: any = {
       "license_name": licenseName,
@@ -141,31 +149,20 @@ const CreateLicense = () => {
       "purchase_date": purchaseDate,
     }
 
-
-    // "concurrency": LicenseReduxState.concurrency,
     if (LicenseReduxState.custom == "variable") {
       let updatedBookList = LicenseReduxState.collectUpdatedBooks; // {bookId: bookOb}
       const data = { ...newLicenseData };
       data["booksInBundle"] = Object.values(updatedBookList);
-      const response = await createLicense(data, "variable");
-      console.log(response)
-      //callCreateLicenseAPI(data, variable);
+      await createLicense(data, "variable");
     }
-    else { // single concurrency update 
+    else {
       const data = { ...newLicenseData };
       data["concurrency"] = LicenseReduxState.concurrency;
-      const response = await createLicense(data, "default");
-      console.log(response)
+      await createLicense(data, "default");
     }
     navigate("/licenses");
     console.log(data);
   }
-  // }
-
-  // function callSearchAPI(query) {
-  // const filteredList = getBundlesBySearch(query);
-  // setFilteredBundles(filteredList)
-  // }
   return (
     <>
       <Navbar />
@@ -281,11 +278,6 @@ const CreateLicense = () => {
                 <strong>Selected Bundle: </strong> {selectedBundle}
               </div>
             )}
-            {/* <div className="product-status">
-              <span className="available">Available: 2</span>
-              <span className="forthcoming">Forthcoming: 0</span>
-              <span className="invalid">Invalid: 0</span>
-            </div> */}
           </div>
 
           {/* <!-- DRM Policies --> */}
@@ -307,14 +299,6 @@ const CreateLicense = () => {
               <button onClick={() => navigate("/license")} type="button">View/Edit concurrency per title</button>
             </div>
           )}
-          {/* <div className="form-section drm-policies">
-            <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
-            <div className="policy">
-              <span>Concurrency: 1</span>
-              <span>Print/Copy: --</span>
-            </div>
-            <a href="/editConcurracy">View/Edit concurrency per title</a>
-          </div> */}
 
           {/* <!-- Save/Cancel Buttons --> */}
 
