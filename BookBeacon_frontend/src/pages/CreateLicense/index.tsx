@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { searchBundles } from "../../services/bundle";
+import { useNavigate } from "react-router-dom";
 
 const bundleNames = [
   "ariddles24", "ngilderoyy", "kbrandi0", "bgariff3", "ramorta", "kbrandi0", "lironl",
@@ -30,7 +31,7 @@ const debounce = (func, delay) => {
 };
 
 const CreateLicense = () => {
-
+  const navigate = useNavigate();
   const [mode, setMode] = useState("Premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
@@ -128,7 +129,7 @@ const CreateLicense = () => {
       data.booksInBundle = LicenseReduxState.booksInBundle;
 
       const response = await createLicense(data, "variable");
-      
+
       console.log(response)
       //callCreateLicenseAPI(data, variable);
 
@@ -148,146 +149,148 @@ const CreateLicense = () => {
   // setFilteredBundles(filteredList)
   // }
   return (
-    <>
+    <div>
       <Navbar />
-      <h1 className="container-title">LICENSE DETAILS</h1>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <div className="container">
-          {/* <!-- License Type --> */}
-          <div className="license-type">
-            <button
-              className={`license-btn ${mode === "Premium" ? "active" : ""
-                }`}
-              onClick={() => handleLicenseSelection("Premium")}
-            >
-              Premium
-            </button>
-            <button
-              className={`license-btn ${mode === "Normal" ? "active" : ""
-                }`}
-              onClick={() => handleLicenseSelection("Normal")}
-            >
-              Normal
-            </button>
-          </div>
-          <div className="form-section">
-            <label htmlFor="license-name">
-              License Name<span className="required"> * </span>
-            </label>
-            <input
-              type="text"
-              id="license-name"
-              required
-              placeholder="Enter License Name"
-              onChange={(e) => setLicenseName(e.target.value)}
-            />
-
-
-
-            <label htmlFor="start-date">
-              Select Start Date <span className="required">*</span>
-            </label>
-            <input
-              type="date"
-              id="start-date"
-              required
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-
-
-            <label htmlFor="end-date">
-              Select End Date <span className="required">*</span>
-            </label>
-            <input
-              type="date"
-              id="end-date"
-              required
-              value={endDate}
-              onChange={handleEndDateChange}
-            />
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-            <label htmlFor="purchase-date">
-              Select Purchase Date <span className="required">*</span>
-            </label>
-            <input
-              type="date"
-              id="purchase-date"
-              value={purchaseDate}
-              onChange={(e) => setPurchaseDate(e.target.value)}
-
-              required
-            />
-          </div>
-
-        </div>
-        <h1 className="container-title">PRODUCT BUNDLE</h1>
-        <div className="container">
-
-          {/* <!-- Product Bundle --> */}
-          <div className="form-section">
-            <label htmlFor="bundle-name">Product Bundle <span className="required">*</span> </label>
-            <div className="input-container">
+      <div className="create-license-container">
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <div className="container">
+            <h1 className="container-title">LICENSE DETAILS</h1>
+            {/* <!-- License Type --> */}
+            <div className="license-type">
+              <button
+                className={`license-btn ${mode === "Premium" ? "active" : ""
+                  }`}
+                onClick={() => handleLicenseSelection("Premium")}
+              >
+                Premium
+              </button>
+              <button
+                className={`license-btn ${mode === "Normal" ? "active" : ""
+                  }`}
+                onClick={() => handleLicenseSelection("Normal")}
+              >
+                Normal
+              </button>
+            </div>
+            <div className="form-section">
+              <label htmlFor="license-name">
+                License Name<span className="required"> * </span>
+              </label>
               <input
                 type="text"
-                id="bundle-name"
-                value={query}
-                onChange={handleInputChange}
-                placeholder="Search by Bundle Name"
-                disabled={!!selectedBundle}
+                id="license-name"
+                required
+                placeholder="Enter License Name"
+                onChange={(e) => setLicenseName(e.target.value)}
               />
-              {!selectedBundle && <i className="fa fa-search"></i>}
-              {selectedBundle && <i className="clear-icon" onClick={handleClearBundle}>✖</i>}
+
+
+
+              <label htmlFor="start-date">
+                Select Start Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="start-date"
+                required
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+
+
+              <label htmlFor="end-date">
+                Select End Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="end-date"
+                required
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+              <label htmlFor="purchase-date">
+                Select Purchase Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="purchase-date"
+                value={purchaseDate}
+                onChange={(e) => setPurchaseDate(e.target.value)}
+
+                required
+              />
             </div>
-            {filteredBundles.length > 0 && (
-              <ul className="bundle-list">
-                {filteredBundles.map((bundle, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleBundleClick(bundle)}
-                    className="bundle-item"
-                  >
-                    {bundle.bundle_Name}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {selectedBundle && (
-              <div className="selected-bundle">
-                <strong>Selected Bundle: </strong> {selectedBundle}
+
+          </div>
+          <div className="container">
+
+            <h1 className="container-title">PRODUCT BUNDLE</h1>
+            {/* <!-- Product Bundle --> */}
+            <div className="form-section">
+              <label htmlFor="bundle-name">Product Bundle <span className="required">*</span> </label>
+              <div className="input-container">
+                <input
+                  type="text"
+                  id="bundle-name"
+                  value={query}
+                  onChange={handleInputChange}
+                  placeholder="Search by Bundle Name"
+                  disabled={!!selectedBundle}
+                />
+                {!selectedBundle && <i className="fa fa-search"></i>}
+                {selectedBundle && <i className="clear-icon" onClick={handleClearBundle}>✖</i>}
               </div>
-            )}
-            <div className="product-status">
-              <span className="available">Available: 2</span>
-              <span className="forthcoming">Forthcoming: 0</span>
-              <span className="invalid">Invalid: 0</span>
+              {filteredBundles.length > 0 && (
+                <ul className="bundle-list">
+                  {filteredBundles.map((bundle, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleBundleClick(bundle)}
+                      className="bundle-item"
+                    >
+                      {bundle.bundle_Name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {selectedBundle && (
+                <div className="selected-bundle">
+                  <strong>Selected Bundle: </strong> {selectedBundle}
+                </div>
+              )}
+              <div className="product-status">
+                <span className="available">Available: 2</span>
+                <span className="forthcoming">Forthcoming: 0</span>
+                <span className="invalid">Invalid: 0</span>
+              </div>
             </div>
+
+            {/* <!-- DRM Policies --> */}
+          </div>
+          <div className="container">
+            <h1 className="container-title">DRM POLICES</h1>
+            <div className="form-section drm-policies">
+              <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
+              <div className="policy">
+                <span>Concurrency: 1</span>
+                <span>Print/Copy: 20</span>
+              </div>
+              <a href="/license">View/Edit concurrency per title</a>
+            </div>
+
+            {/* <!-- Save/Cancel Buttons --> */}
+
+          </div >
+          <div className="form-section buttons">
+            <button className="save-btn" type="submit">Save</button>
+            <button className="cancel-btn" onClick={() => navigate("/licenses")} type="button">Cancel</button>
           </div>
 
-          {/* <!-- DRM Policies --> */}
-        </div>
-        <h1 className="container-title">DRM POLICES</h1>
-        <div className="container">
-          <div className="form-section drm-policies">
-            <div className="content">2 titles are DRM protected. Please review/edit the titles. </div>
-            <div className="policy">
-              <span>Concurrency: 1</span>
-              <span>Print/Copy: 20</span>
-            </div>
-            <a href="/editConcurracy">View/Edit concurrency per title</a>
-          </div>
-
-          {/* <!-- Save/Cancel Buttons --> */}
-
-        </div >
-        <div className="form-section buttons">
-          <button className="save-btn" type="submit">Save</button>
-          <button className="cancel-btn">Cancel</button>
-        </div>
-
-      </form>
-    </>
+        </form>
+      </div>
+    </div>
   );
 };
 

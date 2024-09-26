@@ -10,6 +10,8 @@ interface state {
     collectUpdatedBooks: any,
     bundleName: any,
     bundleId: any,
+    isEditing: any,
+    custom: any
 }
 const initialState: state = {
     licenses: [],
@@ -22,6 +24,8 @@ const initialState: state = {
     collectUpdatedBooks: [],
     bundleName: "",
     bundleId: "",
+    isEditing: false,
+    custom: "default",
 };
 
 const LicenseReducer = createSlice({
@@ -48,6 +52,9 @@ const LicenseReducer = createSlice({
             let books: any = state.licenceBooksInBundle?.map((item: any) => {
                 if (item?.book_id == book_id) {
                     item.concurrency = concurrency;
+                    let updatedBooks = state.collectUpdatedBooks
+                    updatedBooks.push(item);
+                    state.collectUpdatedBooks = updatedBooks;
                     return item;
                 }
                 return item
@@ -59,10 +66,13 @@ const LicenseReducer = createSlice({
             const data: any = state.licenceBooksInBundle;
             data.push(action.payload);
             state.licenceBooksInBundle = data;
+        },
+        setCustom: (state, action) => {
+            state.custom = action.payload;
         }
     }
 })
 
-export const { setLicense, setAllLicense, setLicenceBooksInBundle, updateLicenseBooksInBundle, addUpdatedBooks } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setLicenceBooksInBundle, updateLicenseBooksInBundle, addUpdatedBooks, setCustom } = LicenseReducer.actions;
 
 export default LicenseReducer.reducer;

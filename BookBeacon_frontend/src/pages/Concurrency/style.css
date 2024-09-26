@@ -1,4 +1,7 @@
-/* pages/Concurrency/style.css */
+.container {
+  padding: 0 50px;
+  margin: 0 50px;
+}
 
 .concurrency-action {
   padding: 50px 100px;

@@ -137,7 +137,6 @@ const UpdateBookConcurrencyInLicense = async (req, res) => {
         console.log("bookId", bookId);
 
         for (let book of books) {
-
             if (book.book_id == bookId) {
                 book.concurrency = concurrency;
             }

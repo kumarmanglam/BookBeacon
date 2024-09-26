@@ -28,7 +28,7 @@ const ButtonGroup: React.FC = () => {
   };
 
   const handleSave = () => {
-    navigate('/save');
+    navigate('/createLicence');
   };
 
   return (
