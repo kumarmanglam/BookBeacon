@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
+import { setBooksInBundle, setIsEditing, setLicenceBooksInBundle, updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
 import "./style.css";
 
 // Define types for props
@@ -52,6 +52,7 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
         {data.length > 0 ? (
           data.map((item, index) => (
             <tr key={index} className="table-row">
+              {/* {JSON.stringify(item)} */}
               {headerConfig.map((val, i) => {
                 const cellData = item[val.key];
                 if (val.key === "license_name") {
@@ -85,7 +86,12 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                 if (val.key === "edit") {
                   return (
                     <td key={i} className={`${val.classes} table-data`}>
-                      <button onClick={() => navigate("/booksInLicense")}>
+                      <button onClick={() => {
+                        // set bunlde_books in redux
+                        dispatch(setIsEditing(true));
+                        dispatch(setLicenceBooksInBundle(item.booksInBundle));
+                        navigate("/license");
+                      }}>
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                     </td>
