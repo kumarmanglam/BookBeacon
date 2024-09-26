@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import { setBooksInBundle } from "../../store/reducers/License.reducer";
-
+import LicenseReducer, { setBooksInBundle } from "../../store/reducers/License.reducer";
 
 
 const debounce = (func, delay) => {
@@ -65,7 +64,6 @@ const CreateLicense = () => {
     setSelectedBundleID(bundle.bundle_id);
     const response = await getBooksbyBundleId(bundle.bundle_id);
     dispatch(setBooksInBundle(response.data.booksInBundle));
-    console.log(booksInBundleSSS);
     console.log(response.data.booksInBundle);
     setQuery(bundle.bundle_Name);
     setFilteredBundles([])
