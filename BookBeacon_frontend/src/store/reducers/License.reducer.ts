@@ -23,10 +23,13 @@ const LicenseReducer = createSlice({
         },
         setAllLicense: (state, action) => {
             state.licenses = action.payload;
+        },
+        setBooksInBundle: (state, action) => {
+            state.booksInBundle = action.payload;
         }
     }
 })
 
-export const { setLicense, setAllLicense } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setBooksInBundle } = LicenseReducer.actions;
 
 export default LicenseReducer.reducer;

@@ -71,6 +71,7 @@ input[type="checkbox"] {
     width: 20px;
     height: 20px;
 }
+
 .form-section {
     margin-bottom: 20px;
 }
@@ -200,6 +201,11 @@ select {
     border-radius: 4px;
     cursor: pointer;
     margin-right: 10px;
+    opacity: 0.8;
+}
+
+.save-btn:hover {
+    opacity: 1;
 }
 
 .cancel-btn {
@@ -209,6 +215,11 @@ select {
     border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
+    opacity: 0.8;
+}
+
+.cancel-btn:hover {
+    opacity: 1;
 }
 
 .required {
