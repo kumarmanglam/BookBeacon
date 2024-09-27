@@ -1,11 +1,13 @@
 import React from 'react'
 
 import "./style.css"
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
+    const navigate = useNavigate();
     return (
         <div className='navbar'>
-            <div><p className='nav-logo'>BookBeacon</p></div>
+            <div><button className='nav-logo' onClick={() => navigate("/licenses")}>BookBeacon</button></div>
         </div>
     )
 }
