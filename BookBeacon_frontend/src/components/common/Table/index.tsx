@@ -106,7 +106,7 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                       {
                         item.concurrency == -1 ? 'NA' : <input
                           type="number"
-                          min="0"
+                          min="1"
                           max="1000"
                           value={item.concurrency}
                           className="concurrency-input"
@@ -115,7 +115,11 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                               callSetUpdateLicense(item.book_id, 0);
                             }
                           }}
-                          onChange={(e) => callSetUpdateLicense(item.book_id, parseInt(e.target.value))}
+                          onChange={(e) => {
+                            const inputValue = parseInt(e.target.value, 10);
+                            const clampedValue = Math.max(1, Math.min(1000, inputValue));
+                            callSetUpdateLicense(item.book_id, clampedValue)
+                          }}
                         />
                       }
 

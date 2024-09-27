@@ -172,9 +172,14 @@ const ConcurrencyPage = () => {
               <input
                 type="number"
                 value={bulkEditValue}
-                min="0"
+                min="1"
                 max="1000"
-                onChange={(e: any) => setBulkEditValue(e.target.value)}
+                onChange={(e: any) => {
+
+                  const inputValue = parseInt(e.target.value, 10);
+                  const clampedValue = Math.max(1, Math.min(1000, inputValue));
+                  setBulkEditValue(clampedValue)
+                }}
                 className="popup-input"
               />
               <button onClick={handleBulkSave} className="popup-save-button">
