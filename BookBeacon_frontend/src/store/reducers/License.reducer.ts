@@ -8,12 +8,12 @@ interface state {
     isLicenseExisting: any,
     concurrency: any,
     booksInBundle: any,
-    licenceBooksInBundle: any,
     collectUpdatedBooks: any,
     bundleName: any,
     bundleId: any,
     isEditing: any,
     custom: any,
+    licenseId: any,
     newLicenseData: any
 }
 const today = new Date().toISOString().split("T")[0];
@@ -24,12 +24,12 @@ const initialState: state = {
     isLicenseExisting: false,
     concurrency: 1,
     booksInBundle: [],
-    licenceBooksInBundle: [],
-    collectUpdatedBooks: {}, // should be like set (no duplicates object by book_id)
+    collectUpdatedBooks: {},
     bundleName: "",
     bundleId: "",
     isEditing: false,
     custom: "default",
+    licenseId: "",
     newLicenseData: {
         "license_name": "",
         "bundle_id": "",
@@ -57,15 +57,18 @@ const LicenseReducer = createSlice({
         setConcurrency: (state, action) => {
             state.concurrency = action.payload;
         },
-        setLicenceBooksInBundle: (state, action) => {
-            state.licenceBooksInBundle = action.payload;
+        setBundleId: (state, action) => {
+            state.bundleId = action.payload
         },
+        // setLicenceBooksInBundle: (state, action) => {
+        //     state.licenceBooksInBundle = action.payload;
+        // },
         updateLicenseBooksInBundle: (state, action) => {
             let book_id: any = action.payload.id;
             let concurrency = action.payload.concurrency;
             console.log(book_id);
             console.log(concurrency);
-            let books: any = state.licenceBooksInBundle?.map((item: any) => {
+            let books: any = state.booksInBundle?.map((item: any) => {
                 if (item?.book_id == book_id) {
                     item.concurrency = concurrency;
                     // let updatedBooks = state.collectUpdatedBooks
@@ -76,7 +79,7 @@ const LicenseReducer = createSlice({
                 return item
             });
             console.log(books);
-            state.licenceBooksInBundle = books;
+            state.booksInBundle = books;
         },
         setCollectUpdatedBooks: (state, action) => {
             state.collectUpdatedBooks = action.payload;
@@ -89,6 +92,9 @@ const LicenseReducer = createSlice({
         },
         setCustom: (state, action) => {
             state.custom = action.payload;
+        },
+        setLicenseId: (state, action) => {
+            state.licenseId = action.payload;
         },
         setNewLicenseData: (state, action: any) => {
             console.log(action.payload);
@@ -110,8 +116,6 @@ const LicenseReducer = createSlice({
     }
 })
 
-
-
-export const { setLicense, setAllLicense, setConcurrency, setLicenceBooksInBundle, updateLicenseBooksInBundle, setCustom, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setCollectUpdatedBooks } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId, setCollectUpdatedBooks } = LicenseReducer.actions;
 
 export default LicenseReducer.reducer;

@@ -129,6 +129,7 @@ const EditLicense = async (req, res) => {
             }
             console.log(books)
             license.booksInBundle = books;
+
             res.status(200).json(license);
         }
 
@@ -151,12 +152,13 @@ const EditLicense = async (req, res) => {
                     console.log(book);
                     return book;
                 } else {
-                    if (book.is_Premium) {
-                        book.concurrency = 1;
-                    } else {
-                        book.concurrency = -1;
-                    }
+                    // if (book.is_Premium) {
+                    //     book.concurrency = 1;
+                    // } else {
+                    //     book.concurrency = -1;
+                    // }
                     // console.log(book);
+
                     return book;
                 }
             });
@@ -165,9 +167,9 @@ const EditLicense = async (req, res) => {
             license.booksInBundle = updatedBundleBooksConcurrency;
             res.status(200).json(license);
         }
-
+        await license.save();
     } catch (err) {
-        res.status(500).json("error in bulk license update ", err);
+        res.status(500).json({ "error in bulk license update ": err });
         console.log(err)
     }
 }

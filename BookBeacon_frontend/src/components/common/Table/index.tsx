@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { setBooksInBundle, setIsEditing, setLicenceBooksInBundle, updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
+import { setBooksInBundle, setIsEditing, setLicenseId, updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
 import "./style.css";
 
 // Define types for props
@@ -89,7 +89,8 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                       <button onClick={() => {
                         // set bunlde_books in redux
                         dispatch(setIsEditing(true));
-                        dispatch(setLicenceBooksInBundle(item.booksInBundle));
+                        dispatch(setLicenseId(item.license_id))
+                        dispatch(setBooksInBundle(item.booksInBundle));
                         navigate("/license");
                       }}>
                         <FontAwesomeIcon icon={faEdit} />
@@ -100,17 +101,21 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                 if (val.key === "concurrency") {
                   return (
                     <td key={i} className={`${val.classes} table-data`}>
-                      <input
-                        type="number"
-                        value={item.concurrency}
-                        className="concurrency-input"
-                        onBlur={(e) => {
-                          if (e.target.value === "") {
-                            callSetUpdateLicense(item.book_id, 0);
-                          }
-                        }}
-                        onChange={(e) => callSetUpdateLicense(item.book_id, parseInt(e.target.value))}
-                      />
+                      {
+                        item.concurrency == -1 ? 'NA' : <input
+                          type="number"
+                          min="0"
+                          value={item.concurrency}
+                          className="concurrency-input"
+                          onBlur={(e) => {
+                            if (e.target.value === "") {
+                              callSetUpdateLicense(item.book_id, 0);
+                            }
+                          }}
+                          onChange={(e) => callSetUpdateLicense(item.book_id, parseInt(e.target.value))}
+                        />
+                      }
+
                     </td>
                   );
                 }
