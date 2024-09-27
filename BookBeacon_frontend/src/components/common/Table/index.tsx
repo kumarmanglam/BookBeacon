@@ -72,14 +72,14 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                 if (val.key === "start_date") {
                   return (
                     <td key={i} className={`${val.classes} table-data`}>
-                      {cellData}
+                      {cellData.slice(0, 10)}
                     </td>
                   );
                 }
                 if (val.key === "end_date") {
                   return (
                     <td key={i} className={`${val.classes} table-data`}>
-                      {cellData}
+                      {cellData.slice(0, 10)}
                     </td>
                   );
                 }

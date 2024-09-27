@@ -44,103 +44,61 @@ const Login = () => {
 
   };
   const navigate = useNavigate()
-  return (
-
-<>
-
-<h1 className="text-3xl font-bold text-center text-gray-800 mt-8 mb-6 tracking-wide ">BookBeacon</h1>
-   
-      {/* <div className="mt-10"> */}
-      <div className="login-container-wrapper">
-        <div className="logincontainer">
-          <div className="login-heading">
-            <h1>Login</h1>
-          </div>
-
-          <form className="formcontainer" onSubmit={(e) => handleSubmit(e)}>
-            <div className="fields">
-              <label className="field-labels">Email</label>
-              <br />
-              <input
-                type="email"
-                className="input"
-                name="email"
-                required
-                value={loginForm?.email}
-                onChange={(e) => {
-                  SetLoginForm({
-                    ...loginForm,
-                    email: e?.currentTarget?.value,
-                  });
-                }}
-              />
-            </div>
-            <div className="fields">
-              <label className="field-labels">Password</label>
-              <br />
-              <input
-                className="input"
-                type="password"
-                name="password"
-                required
-                value={loginForm?.password}
-                onChange={(e) =>
-                  SetLoginForm({
-                    ...loginForm,
-                    password: e?.currentTarget?.value,
-                  })
-                }
-              />
-            </div>
-
-            <form className="formcontainer" onSubmit={(e) => handleSubmit(e)}>
-              <div className="fields">
-                <label className="field-labels">Email</label>
-                <br />
-                <input
-                  type="email"
-                  id="input"
-                  name="email"
-                  required
-                  value={loginForm?.email}
-                  onChange={(e) => {
-                    SetLoginForm({
-                      ...loginForm,
-                      email: e?.currentTarget?.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="fields">
-                <label className="field-labels">Password</label>
-                <br />
-                <input
-                  id="input"
-                  type="password"
-                  name="password"
-                  required
-                  value={loginForm?.password}
-                  onChange={(e) =>
-                    SetLoginForm({
-                      ...loginForm,
-                      password: e?.currentTarget?.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="login-submit">
-                <button id="btn" type="submit" value="Sign in" disabled={!isLogButtonActive} >
-                  Submit
-                </button>
-              </div>
-            </form>
-            <div className="signup-prompt">Do not have an account?<Link to="/signup"><b>SignUp</b></Link></div>
-          </div>
+  return (<div>
+    <h1 className="text-3xl font-bold text-center text-gray-800 mt-8 mb-6 tracking-wide ">BookBeacon</h1>
+    {/* <div className="mt-10"> */}
+    <div className="login-container-wrapper">
+      <div className="logincontainer">
+        <div className="login-heading">
+          <h1>Login</h1>
         </div>
+        <form className="formcontainer" onSubmit={(e) => handleSubmit(e)}>
+          <div className="fields">
+            <label className="field-labels">Email</label>
+            <br />
+            <input
+              type="email"
+              className="input"
+              name="email"
+              required
+              value={loginForm?.email}
+              onChange={(e) => {
+                SetLoginForm({
+                  ...loginForm,
+                  email: e?.currentTarget?.value,
+                });
+              }}
+            />
+          </div>
+          <div className="fields">
+            <label className="field-labels">Password</label>
+            <br />
+            <input
+              className="input"
+              type="password"
+              name="password"
+              required
+              value={loginForm?.password}
+              onChange={(e) =>
+                SetLoginForm({
+                  ...loginForm,
+                  password: e?.currentTarget?.value,
+                })
+              }
+            />
+          </div>
+
+          <div className="login-submit">
+            <button id="btn" type="submit" value="Sign in" disabled={!isLogButtonActive} >
+              Submit
+            </button>
+          </div>
+        </form>
+        <div className="signup-prompt">Do not have an account?<Link to="/signup"><b>SignUp</b></Link></div>
       </div>
-    </>
-  );
+    </div>
+  </div>
+  )
 };
 
 export default Login;
