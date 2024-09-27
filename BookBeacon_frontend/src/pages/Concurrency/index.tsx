@@ -173,6 +173,7 @@ const ConcurrencyPage = () => {
                 type="number"
                 value={bulkEditValue}
                 min="1"
+                step="1"
                 max="1000"
                 onChange={(e: any) => {
 

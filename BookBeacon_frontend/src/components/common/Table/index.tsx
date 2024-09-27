@@ -108,11 +108,12 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                           type="number"
                           min="1"
                           max="1000"
+                          step="1"
                           value={item.concurrency}
                           className="concurrency-input"
                           onBlur={(e) => {
                             if (e.target.value === "") {
-                              callSetUpdateLicense(item.book_id, 0);
+                              callSetUpdateLicense(item.book_id, 1);
                             }
                           }}
                           onChange={(e) => {
