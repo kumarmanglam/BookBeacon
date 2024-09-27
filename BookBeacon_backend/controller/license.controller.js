@@ -13,7 +13,11 @@ const createLicense = async (req, res) => {
         if (custom == 'default') {
             if (req.body.data.mode == "normal") {
                 const bookList = bundleBooksByBundleId.booksInBundle;
-                const filteredBooks = bookList.filter((book) => book.is_Premium == false);
+                const filteredBooks = bookList.filter((book) => book.is_Premium == false).map(book => {
+                    let bookCopy = { ...book };
+                    bookCopy.concurrency = -1
+                    return bookCopy;
+                });
                 data.booksInBundle = filteredBooks;
             } else { // premium books
                 data.booksInBundle = bundleBooksByBundleId.booksInBundle;

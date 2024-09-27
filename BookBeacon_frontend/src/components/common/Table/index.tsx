@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { setBooksInBundle, setIsEditing, setLicenseId, updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
+import { setBooksInBundle, setIsEditing, setLicenseId, setMode, updateLicenseBooksInBundle } from "../../../store/reducers/License.reducer";
 import "./style.css";
 
 // Define types for props
@@ -89,7 +89,8 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                       <button onClick={() => {
                         // set bunlde_books in redux
                         dispatch(setIsEditing(true));
-                        dispatch(setLicenseId(item.license_id))
+                        dispatch(setLicenseId(item.license_id));
+                        dispatch(setMode(item.mode));
                         dispatch(setBooksInBundle(item.booksInBundle));
                         navigate("/license");
                       }}>
@@ -105,6 +106,7 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                         item.concurrency == -1 ? 'NA' : <input
                           type="number"
                           min="0"
+                          max="1000"
                           value={item.concurrency}
                           className="concurrency-input"
                           onBlur={(e) => {
