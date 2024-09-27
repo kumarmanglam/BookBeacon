@@ -14,7 +14,10 @@ interface state {
     isEditing: any,
     custom: any,
     licenseId: any,
-    newLicenseData: any
+    newLicenseData: any,
+    isUserLoggedIn: boolean,
+    mode: any,
+
 }
 const today = new Date().toISOString().split("T")[0];
 const initialState: state = {
@@ -22,6 +25,7 @@ const initialState: state = {
     currentLicense: {},
     isVariableConcurrency: false,
     isLicenseExisting: false,
+    isUserLoggedIn: false,
     concurrency: 1,
     booksInBundle: [],
     collectUpdatedBooks: {},
@@ -38,6 +42,7 @@ const initialState: state = {
         "end_date": "",
         "purchase_date": today,
     },
+    mode: "",
 };
 
 const LicenseReducer = createSlice({
@@ -60,6 +65,9 @@ const LicenseReducer = createSlice({
         setBundleId: (state, action) => {
             state.bundleId = action.payload
         },
+        setIsUserLoggedIn: (state, action) => {
+            state.isUserLoggedIn = action.payload;
+        },
         updateLicenseBooksInBundle: (state, action) => {
             let book_id: any = action.payload.id;
             let concurrency = action.payload.concurrency;
@@ -80,9 +88,6 @@ const LicenseReducer = createSlice({
         },
         setCollectUpdatedBooks: (state, action) => {
             state.collectUpdatedBooks = action.payload;
-        },
-        setBundleId: (state, action) => {
-            state.bundleId = action.payload;
         },
         setIsEditing: (state, action) => {
             state.isEditing = action.payload;
@@ -107,13 +112,13 @@ const LicenseReducer = createSlice({
         setBundleName: (state, action) => {
             state.bundleName = action.payload;
         },
-        setIsEditing: (state, action) => {
-            state.isEditing = action.payload;
-        }
+        setMode: (state, action) => {
+            state.mode = action.payload;
+        },
     }
 })
 
 
-export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId, setCollectUpdatedBooks } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setIsUserLoggedIn, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId, setCollectUpdatedBooks, setMode } = LicenseReducer.actions;
 
 export default LicenseReducer.reducer;

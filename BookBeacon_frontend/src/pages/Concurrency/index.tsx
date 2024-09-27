@@ -24,13 +24,12 @@ const ConcurrencyPage = () => {
   const licenseState = useSelector(selectLicenseState);
   const booksInBundle = licenseState.booksInBundle;
   const license_id = licenseState.licenseId;
+  const mode = licenseState.mode;
   const [bulkEditValue, setBulkEditValue] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [isBulkSave, setIsBulkSave] = useState<boolean>(false);
   const updatedBooks = licenseState.collectUpdatedBooks;
-
   const isEditing = useSelector(selectLicenseState).isEditing;
-
   // const handleConcurrencyChange = (index: number, value: string) => {
   //   const bundles = [...data];
   //   bundles[index].concurrency = Number(value);
@@ -134,7 +133,10 @@ const ConcurrencyPage = () => {
       <Navbar />
       <div className='container'>
         <div className='concurrency-action'>
-          <a onClick={handleBulkEdit} className="bulk-edit-link">Bulk Edit</a>
+          {mode != "normal" ?
+            <a onClick={handleBulkEdit} className="bulk-edit-link">Bulk Edit</a>
+            : null
+          }
           <div className="flex justify-end gap-5">
             <button onClick={() => handleSave()} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Save
