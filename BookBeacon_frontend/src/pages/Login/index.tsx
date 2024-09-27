@@ -29,9 +29,9 @@ const Login = () => {
     event.preventDefault();
     try {
 
-      dispatch(setIsUserLoggedIn(true));
       const response = await callLoginAPI(loginForm.email, loginForm.password);
 
+      dispatch(setIsUserLoggedIn(true));
       console.log("response token...", response.data.token);
       console.log(response.status)
 

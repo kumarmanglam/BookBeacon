@@ -168,6 +168,8 @@ const ConcurrencyPage = () => {
               <input
                 type="number"
                 value={bulkEditValue}
+                min="0"
+                max="1000"
                 onChange={(e: any) => setBulkEditValue(e.target.value)}
                 className="popup-input"
               />

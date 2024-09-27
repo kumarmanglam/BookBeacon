@@ -13,9 +13,9 @@ import CreateLicense from '../pages/CreateLicense';
 const RouterContainer = () => {
     return (
         <Routes>
+            <Route path='/' element={<AuthenticatedComponent><ViewLicenses /></AuthenticatedComponent>} />
             <Route path='/login' element={<Login />} />
             <Route path='/signup' element={<Signup />}></Route>
-            <Route path='/' element={<Layout />} />
             <Route path='/licenses' element={<AuthenticatedComponent><ViewLicenses /></AuthenticatedComponent>} />
             <Route path='/booksInLicense' element={<AuthenticatedComponent><ViewBooksInsideLicense /></AuthenticatedComponent>} />
             <Route path='/license' element={<AuthenticatedComponent><ConcurrencyPage /></AuthenticatedComponent>} />
