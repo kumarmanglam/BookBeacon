@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { booksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import { setBundleName, setCollectUpdatedBooks, setConcurrency, setCustom, setBooksInBundle, setNewLicenseData, updateLicenseBooksInBundle,setBundleId } from "../../store/reducers/License.reducer";
+import { setBundleName,setCollectUpdatedBooks,setConcurrency, setCustom,setBooksInBundle,setNewLicenseData,updateLicenseBooksInBundle,setBundleId} from "../../store/reducers/License.reducer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -24,9 +24,7 @@ const debounce = (func, delay) => {
 const CreateLicense = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const today = new Date().toISOString().split("T")[0];
-
   const [mode, setMode] = useState("premium");
   const [licenseName, setLicenseName] = useState<string>("");
   const [startDate, setStartDate] = useState("");
@@ -91,7 +89,6 @@ const CreateLicense = () => {
 
     setEndDate(selectedEndDate);
     setStartDate(newLicenseData.start_date);
-    console.log(startDate, endDate, "bdcj");
     if (newLicenseData.start_date && newLicenseData.end_date && newLicenseData.end_date < newLicenseData.start_date) {
       dispatch(setNewLicenseData({ name: "end_date", value: "" }));
       setEndDate("");
@@ -121,10 +118,7 @@ const CreateLicense = () => {
     dispatch(setNewLicenseData({ name: "end_date", value: "" }));
     dispatch(setNewLicenseData({ name: "purchase_date", value: today }));
     dispatch(setCollectUpdatedBooks({})); 
-    navigate("/licenses");
     // fix this issue
-
-
     setLicenseName("");
     setStartDate("");
     setEndDate("");
@@ -132,6 +126,7 @@ const CreateLicense = () => {
     setSelectedBundle("");
     setMode("premium");
     setQuery("");
+    navigate("/licenses");
   }
 
   useEffect(() => {
@@ -141,9 +136,14 @@ const CreateLicense = () => {
     }
   }, [])
 
+
   async function handleSubmit(e: any) {
     e.preventDefault();
     if(!handleEndDateChange()){
+      return;
+    }
+    if(!selectedBundle){
+      alert("Please Select a Product Bundle");
       return;
     }
 
@@ -168,13 +168,13 @@ const CreateLicense = () => {
       data["concurrency"] = LicenseReduxState.concurrency;
       await createLicense(data, "default");
     }
+    handleReset();
     navigate("/licenses");
     console.log(data);
   }
  
   return (
     <>
-      <Navbar />
       <h1 className="container-title">LICENSE DETAILS</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="container">
@@ -291,7 +291,7 @@ const CreateLicense = () => {
 
           {/* <!-- DRM Policies --> */}
         </div>
-        <h1 className="container-title">DRM POLICES</h1>
+        {mode ==="premium" ? (<div> <h1 className="container-title">DRM POLICES</h1>
         <div className="container">
           {!selectedBundle && (
             <div >
@@ -305,13 +305,16 @@ const CreateLicense = () => {
                 <span>Concurrency: {concurrency}</span>
                 <span>Print/Copy: --</span>
               </div>
-              <button onClick={() => navigate("/license")} type="button">View/Edit concurrency per title</button>
+              <div className="view-edit-button-container">
+              <button className="view-edit-button" onClick={() => navigate("/license")} type="button">View/Edit concurrency per title</button>
+              </div>
             </div>
           )}
 
           {/* <!-- Save/Cancel Buttons --> */}
 
-        </div >
+        </div > </div>) :(<div></div>) }
+       
         <div className="form-section buttons">
           <button className="save-btn" type="submit"> Save</button>
           <button className="cancel-btn" type="reset" onClick={() => handleReset()}> Cancel</button>

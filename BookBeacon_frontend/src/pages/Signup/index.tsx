@@ -39,7 +39,7 @@ const Signup = () => {
         BookBeacon
       </h1>
 
-      <div className="mt-10">
+      
         <div className="signup-container-wrapper">
           <div className="signupcontainer">
             <div className="signup-heading">
@@ -52,7 +52,7 @@ const Signup = () => {
                 </label>
                 <input
                   type="text"
-                  id="input"
+                  className="input1"
                   name="first name"
                   required
                   value={signupForm?.first_name}
@@ -70,7 +70,7 @@ const Signup = () => {
                 </label>
                 <input
                   type="text"
-                  id="input"
+                  className="input1"
                   name="last name"
                   required
                   value={signupForm?.second_name}
@@ -88,7 +88,7 @@ const Signup = () => {
                 </label>
                 <input
                   type="email"
-                  id="input"
+                  className="input1"
                   name="email"
                   required
                   value={signupForm?.email}
@@ -105,7 +105,7 @@ const Signup = () => {
                   Password
                 </label>
                 <input
-                  id="input"
+                  className="input1"
                   type="password"
                   name="password"
                   required
@@ -126,7 +126,7 @@ const Signup = () => {
             </form>
           </div>
         </div>
-      </div>
+      
     </>
   );
 };
