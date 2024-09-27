@@ -40,9 +40,10 @@ const Login = () => {
 const navigate=useNavigate()
   return (
 <>
-<h1 className="text-3xl font-bold text-center text-gray-800 mt-8 mb-6 tracking-wide">BookBeacon</h1>
+
+<h1 className="text-3xl font-bold text-center text-gray-800 mt-8 mb-6 tracking-wide ">BookBeacon</h1>
    
-      <div className="mt-10">
+      {/* <div className="mt-10"> */}
       <div className="login-container-wrapper">
         <div className="logincontainer">
           <div className="login-heading">
@@ -55,7 +56,7 @@ const navigate=useNavigate()
               <br />
               <input
                 type="email"
-                id="input"
+                className="input"
                 name="email"
                 required
                 value={loginForm?.email}
@@ -71,7 +72,7 @@ const navigate=useNavigate()
               <label className="field-labels">Password</label>
               <br />
               <input
-                id="input"
+                className="input"
                 type="password"
                 name="password"
                 required
@@ -94,7 +95,7 @@ const navigate=useNavigate()
           <div className="signup-prompt">Do not have an account?<Link to="/signup"><b>SignUp</b></Link></div>
         </div>
       </div>
-      </div>
+      {/* </div> */}
     </>
   );
 };
