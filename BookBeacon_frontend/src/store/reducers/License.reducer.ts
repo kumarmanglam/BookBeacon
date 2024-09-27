@@ -60,9 +60,6 @@ const LicenseReducer = createSlice({
         setBundleId: (state, action) => {
             state.bundleId = action.payload
         },
-        // setLicenceBooksInBundle: (state, action) => {
-        //     state.licenceBooksInBundle = action.payload;
-        // },
         updateLicenseBooksInBundle: (state, action) => {
             let book_id: any = action.payload.id;
             let concurrency = action.payload.concurrency;
@@ -115,6 +112,7 @@ const LicenseReducer = createSlice({
         }
     }
 })
+
 
 export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId, setCollectUpdatedBooks } = LicenseReducer.actions;
 

@@ -2,10 +2,10 @@ import React, { useDebugValue, useEffect, useState } from "react";
 import "./index.css";
 import Navbar from "../../components/common/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { selectbooksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
+import { booksInBundle, selectLicenseState } from "../../store/selectors/License.selector";
 import { createLicense } from "../../services/license";
 import { getBooksbyBundleId, searchBundles } from "../../services/bundle";
-import { setBundleName, setCollectUpdatedBooks, setConcurrency, setCustom, setLicenceBooksInBundle, setNewLicenseData, updateLicenseBooksInBundle } from "../../store/reducers/License.reducer";
+import { setBundleName, setCollectUpdatedBooks, setConcurrency, setCustom, setBooksInBundle, setNewLicenseData, updateLicenseBooksInBundle,setBundleId } from "../../store/reducers/License.reducer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -60,18 +60,17 @@ const CreateLicense = () => {
     handleSearch(event.target.value); // Trigger the debounced search
   };
 
-  const booksCountInBundle = useSelector(selectbooksInBundle).length;
+  const booksCountInBundle = useSelector(booksInBundle).length;
 
   const handleBundleClick = async (bundle: any) => {
 
     setSelectedBundle(bundle.bundle_Name);
     setSelectedBundleID(bundle.bundle_id);
-
     dispatch(setBundleName(bundle.bundle_Name));
-
     dispatch(setNewLicenseData({ name: "bundle_id", value: bundle.bundle_id }));
+    dispatch(setBundleId(bundle.bundle_id));
     const response = await getBooksbyBundleId(bundle.bundle_id);
-    dispatch(setLicenceBooksInBundle(response.data.booksInBundle));
+    dispatch(setBooksInBundle(response.data.booksInBundle));
     console.log(response.data.booksInBundle);
     setQuery(bundle.bundle_Name);
     setFilteredBundles([])
@@ -81,6 +80,9 @@ const CreateLicense = () => {
 
   const handleLicenseSelection = (licenseType: string) => {
     setMode(licenseType);
+    if(licenseType =="normal"){
+      dispatch(setCustom("default"));
+    }
     dispatch(setNewLicenseData({ name: "mode", value: licenseType }));
   };
 
@@ -89,26 +91,28 @@ const CreateLicense = () => {
 
     setEndDate(selectedEndDate);
     setStartDate(newLicenseData.start_date);
-    // console.log(newLicenseData.start_date,'anish');
     console.log(startDate, endDate, "bdcj");
-    if (newLicenseData.start_date && newLicenseData.end_date && newLicenseData.end_date <= newLicenseData.start_date) {
+    if (newLicenseData.start_date && newLicenseData.end_date && newLicenseData.end_date < newLicenseData.start_date) {
       dispatch(setNewLicenseData({ name: "end_date", value: "" }));
       setEndDate("");
       setErrorMessage("");
       // setErrorMessage("End Date must be after Start Date.");
       alert("End Date must be after Start Date.");
+      return false;
     } else {
       setErrorMessage("");
     }
+    return true;
   };
   const handleClearBundle = () => {
     setSelectedBundle("");
-    dispatch(setLicenceBooksInBundle([]));
+    dispatch(setBooksInBundle([]));
     dispatch(setConcurrency(1));
     dispatch(setBundleName(""));
     dispatch(setNewLicenseData({ name: "bundle_id", value: "" }));
     dispatch(setCustom("default"));
     setQuery("");
+   
   };
   const handleReset = () => {
     handleClearBundle();
@@ -117,6 +121,7 @@ const CreateLicense = () => {
     dispatch(setNewLicenseData({ name: "end_date", value: "" }));
     dispatch(setNewLicenseData({ name: "purchase_date", value: today }));
     dispatch(setCollectUpdatedBooks({})); 
+    navigate("/licenses");
     // fix this issue
 
 
@@ -137,9 +142,12 @@ const CreateLicense = () => {
   }, [])
 
   async function handleSubmit(e: any) {
-    handleEndDateChange();
-
     e.preventDefault();
+    if(!handleEndDateChange()){
+      return;
+    }
+
+    
     const data: any = {
       "license_name": licenseName,
       "bundle_id": selectedBundleId,
@@ -163,6 +171,7 @@ const CreateLicense = () => {
     navigate("/licenses");
     console.log(data);
   }
+ 
   return (
     <>
       <Navbar />

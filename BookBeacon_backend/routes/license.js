@@ -5,10 +5,10 @@ const protect = require("../middleware/authMiddleware")
 const licenseRoute = express.Router();
 
 licenseRoute.get("/licenses", protect, getLicenses);
-licenseRoute.get("/license/:license_id", protect, getLicenseById);
+licenseRoute.get("/license/:license_id", getLicenseById);
 licenseRoute.post("/license", createLicense);
 licenseRoute.put("/license", EditLicense);
 
-licenseRoute.put("/updateBookConcurrencyInLicense", protect, UpdateBookConcurrencyInLicense);
+licenseRoute.put("/updateBookConcurrencyInLicense", UpdateBookConcurrencyInLicense);
 
 module.exports = licenseRoute;
