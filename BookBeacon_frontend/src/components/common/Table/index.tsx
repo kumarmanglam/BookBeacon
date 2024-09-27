@@ -89,7 +89,8 @@ const Table: React.FC<TableProps> = ({ headerConfig, data }) => {
                       <button onClick={() => {
                         // set bunlde_books in redux
                         dispatch(setIsEditing(true));
-                        dispatch(setLicenseId(item.license_id));
+                        console.log(item._id);
+                        dispatch(setLicenseId(item._id));
                         dispatch(setMode(item.mode));
                         dispatch(setBooksInBundle(item.booksInBundle));
                         navigate("/license");
