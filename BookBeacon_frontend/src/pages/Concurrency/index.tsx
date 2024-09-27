@@ -13,7 +13,7 @@ import { booksData } from './data';
 import { fetchBooksById } from '../../services/bundleRough';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLicenseState } from '../../store/selectors/License.selector';
-import { setConcurrency, setCustom, setLicenceBooksInBundle } from '../../store/reducers/License.reducer';
+import { setBooksInBundle, setConcurrency, setCustom } from '../../store/reducers/License.reducer';
 import { editLicenseCustomDefault, editLicenseCustomVariable } from '../../services/license';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,12 +22,12 @@ const ConcurrencyPage = () => {
   const navigate = useNavigate();
   // const [data, setData] = useState<any>([]);
   const licenseState = useSelector(selectLicenseState);
-  const licenceBooksInBundle = licenseState.licenceBooksInBundle;
-
+  const booksInBundle = licenseState.booksInBundle;
+  const license_id = licenseState.licenseId;
   const [bulkEditValue, setBulkEditValue] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [isBulkSave, setIsBulkSave] = useState<boolean>(false);
-  const [updatedBooksList, setUpdatedBooksList] = useState<any>([]);
+  const updatedBooks = licenseState.collectUpdatedBooks;
 
   const isEditing = useSelector(selectLicenseState).isEditing;
 
@@ -46,11 +46,17 @@ const ConcurrencyPage = () => {
   };
 
   const handleBulkSave = () => {
-    const updatedData = licenceBooksInBundle.map((book: any) => ({
-      ...book,
-      concurrency: Number(bulkEditValue),
-    }));
-    dispatch(setLicenceBooksInBundle(updatedData));
+    const updatedData = booksInBundle.map((book: any) => {
+      const bookcopy = { ...book };
+      if (bookcopy.is_Premium == false) {
+        bookcopy.concurrency = -1;
+      } else {
+        bookcopy.concurrency = Number(bulkEditValue)
+      }
+      book = bookcopy;
+      return book;
+    });
+    dispatch(setBooksInBundle(updatedData));
     dispatch(setConcurrency(Number(bulkEditValue)));
     setIsBulkSave(true);
     // in redux we will update the concurrency
@@ -62,25 +68,29 @@ const ConcurrencyPage = () => {
 
 
   const callFetchBunldeByBundleId = async () => {
-    if (licenseState.isEditing) {
-      console.log(licenseState.isEditing);
-      const bookss = licenseState.booksInBundle;
+
+    if (licenseState.isEditing) { // true editing 
 
     }
-    else {
+    else {  // false editing  ------> this saving <-----
       console.log(licenseState.isEditing);
-      console.log("funcation ran");
+      console.log("is Editing ran");
 
-      const bunldeById = await fetchBooksById(19);
-      let bundleBooks = licenseState.booksInBundle
-      // console.log(bunldeById);
+      let bundleBooks = licenseState.booksInBundle;
+      console.log(bundleBooks);
       const books = bundleBooks.map((item: any) => {
-        item.concurrency = 1;
-        return item;
+        let newItem = { ...item };
+        if (newItem.is_Premium) {
+          if (newItem.concurrency) {
+            return newItem;
+          } newItem.concurrency = 1;
+        } else {
+          newItem.concurrency = -1;
+        }
+        return newItem;
       })
       console.log(books);
-      dispatch(setLicenceBooksInBundle(books));
-
+      dispatch(setBooksInBundle(books));
     }
   }
 
@@ -93,29 +103,29 @@ const ConcurrencyPage = () => {
     if (isEditing == false) {// Is new License
       if (isBulkSave) { // bulk concurrency save
         dispatch(setCustom("default"));
-        navigate("/createLicense");
-        // 
       } else { // variable update
         dispatch(setCustom("variable"));
-        navigate("/createLicense");
       }
       navigate("/createLicense")
     } else { // Is editing
       if (isBulkSave) { // bulk concurrency edit  // custom default
         // call the bulk concurrency update API
         let EditData1 = {
-          licenseId: "",
+          license_id: license_id,
           concurrency: bulkEditValue
         }
         await editLicenseCustomDefault(EditData1);
       } else { // variable concurrency edit // custom variable
         // call the varibale concurrency update API
         let EditData2 = {
-          licenseId: "",
-          booksInBUndle: updatedBooksList,
+          license_id: license_id,
+          booksInBundle: Object.values(updatedBooks),
         }
+        console.log(EditData2);
+        console.log(license_id);
         await editLicenseCustomVariable(EditData2);
       }
+      navigate("/licenses");
     }
   }
 
@@ -129,9 +139,12 @@ const ConcurrencyPage = () => {
             <button onClick={() => handleSave()} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Save
             </button>
-            <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-              Download as CSV
+            <button onClick={() => navigate("/licenses")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+              Cancel
             </button>
+            {/* <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+              Download as CSV
+            </button> */}
           </div>
         </div>
 
@@ -140,7 +153,7 @@ const ConcurrencyPage = () => {
           <div className="table-container">
             <Table
               headerConfig={TABLE_HEADER_CONFIG_CONCURRENCY}
-              data={licenceBooksInBundle}
+              data={booksInBundle}
             />
           </div>
         </div>
