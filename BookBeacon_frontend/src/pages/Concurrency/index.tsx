@@ -24,6 +24,7 @@ const ConcurrencyPage = () => {
   const licenseState = useSelector(selectLicenseState);
   const booksInBundle = licenseState.booksInBundle;
   const license_id = licenseState.licenseId;
+  console.log(license_id);
   const mode = licenseState.mode;
   const [bulkEditValue, setBulkEditValue] = useState(0);
   const [showPopup, setShowPopup] = useState(false);

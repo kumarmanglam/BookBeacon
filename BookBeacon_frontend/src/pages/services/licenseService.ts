@@ -18,7 +18,7 @@ export const fetchLicenses = async () => {
       };
     });
 
-    console.log(filteredData);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error fetching licenses:', error);
