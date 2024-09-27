@@ -138,9 +138,12 @@ const ConcurrencyPage = () => {
             : null
           }
           <div className="flex justify-end gap-5">
-            <button onClick={() => handleSave()} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              Save
-            </button>
+            {mode != "normal" ?
+              <button onClick={() => handleSave()} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Save
+              </button>
+              : null
+            }
             <button onClick={() => navigate("/licenses")} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
               Cancel
             </button>
