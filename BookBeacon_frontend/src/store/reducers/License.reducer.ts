@@ -8,7 +8,6 @@ interface state {
     isLicenseExisting: any,
     concurrency: any,
     booksInBundle: any,
-    // licenceBooksInBundle: any,
     collectUpdatedBooks: any,
     bundleName: any,
     bundleId: any,
@@ -17,6 +16,7 @@ interface state {
     licenseId: any,
     newLicenseData: any
 }
+const today = new Date().toISOString().split("T")[0];
 const initialState: state = {
     licenses: [],
     currentLicense: {},
@@ -24,8 +24,7 @@ const initialState: state = {
     isLicenseExisting: false,
     concurrency: 1,
     booksInBundle: [],
-    // licenceBooksInBundle: [],
-    collectUpdatedBooks: {}, // should be like set (no duplicates object by book_id)
+    collectUpdatedBooks: {},
     bundleName: "",
     bundleId: "",
     isEditing: false,
@@ -37,7 +36,7 @@ const initialState: state = {
         "mode": "premium",
         "start_date": "",
         "end_date": "",
-        "purchase_date": "",
+        "purchase_date": today,
     },
 };
 
@@ -82,6 +81,15 @@ const LicenseReducer = createSlice({
             console.log(books);
             state.booksInBundle = books;
         },
+        setCollectUpdatedBooks: (state, action) => {
+            state.collectUpdatedBooks = action.payload;
+        },
+        setBundleId: (state, action) => {
+            state.bundleId = action.payload;
+        },
+        setIsEditing: (state, action) => {
+            state.isEditing = action.payload;
+        },
         setCustom: (state, action) => {
             state.custom = action.payload;
         },
@@ -108,5 +116,6 @@ const LicenseReducer = createSlice({
     }
 })
 
-export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId } = LicenseReducer.actions;
+export const { setLicense, setAllLicense, setConcurrency, updateLicenseBooksInBundle, setCustom, setLicenseId, setBooksInBundle, setNewLicenseData, setBundleName, setIsEditing, setBundleId, setCollectUpdatedBooks } = LicenseReducer.actions;
+
 export default LicenseReducer.reducer;
