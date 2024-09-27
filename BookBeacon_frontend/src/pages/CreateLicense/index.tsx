@@ -93,7 +93,6 @@ const CreateLicense = () => {
       dispatch(setNewLicenseData({ name: "end_date", value: "" }));
       setEndDate("");
       setErrorMessage("");
-      // setErrorMessage("End Date must be after Start Date.");
       alert("End Date must be after Start Date.");
       return false;
     } else {
@@ -175,6 +174,7 @@ const CreateLicense = () => {
  
   return (
     <>
+      <Navbar/>
       <h1 className="container-title">LICENSE DETAILS</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="container">
